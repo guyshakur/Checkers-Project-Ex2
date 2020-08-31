@@ -20,12 +20,20 @@ namespace Checkers
 
         private static void getUserInitialInput()
         {
-            Player Player1 = new Player(e_PlayerID.FIRST, getFromUser("Enter your name (Max size 20 without spaces): ", 20));
-            int boardSize = int.Parse(getFromUser("Choose board size (6,8,10): ", 6, 8, 10));
-            int numOfPlayers = int.Parse(getFromUser("Enter number of players (1,2): ", 1, 2));
-            if (numOfPlayers == 2)
+            Program.Player1.Name = getFromUser("Enter your name (Max size 20 without spaces): ", 20);
+            //Player Player1 = new Player(e_PlayerID.FIRST, getFromUser("Enter your name (Max size 20 without spaces): ", 20));
+            Board.InitialFilledRowsForPlayer= int.Parse(getFromUser("Choose board size (6,8,10): ", 6, 8, 10));
+            //int boardSize = int.Parse(getFromUser("Choose board size (6,8,10): ", 6, 8, 10));
+            Program.NumOfPlayers= int.Parse(getFromUser("Enter number of players (1,2): ", 1, 2));
+            //int numOfPlayers = int.Parse(getFromUser("Enter number of players (1,2): ", 1, 2));
+            if (Program.NumOfPlayers == 2)
             {
-                Player Player2 = new Player(e_PlayerID.SECOND, getFromUser("Enter your name (Max size 20 without spaces): ", 20));
+                Program.Player2.Name = getFromUser("Enter your name (Max size 20 without spaces): ", 20);
+            }
+			else
+			{
+                Program.Player2.Name = "Computer";
+
             }
         }
 
@@ -48,7 +56,6 @@ namespace Checkers
                     (i_Numbers.Length == 3 && 
                         (!int.TryParse(result, out players) || 
                             (players != i_Numbers[0] && players != i_Numbers[1] && players != i_Numbers[2]))));
-            bool elior = int.TryParse(result, out players);
             return result;
 		}
 

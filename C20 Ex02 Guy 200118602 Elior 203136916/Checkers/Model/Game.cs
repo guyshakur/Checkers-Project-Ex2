@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,6 +9,12 @@ namespace Checkers.Model
 {
     class Game
     {
+
+        private Player player1;
+        private Player player2;
+
+        
+
         public Player Player1 { get; set; }
         public Player Player2 { get; set; }
         public Player PlayerTurn { get; set; }

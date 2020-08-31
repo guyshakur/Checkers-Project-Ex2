@@ -13,8 +13,8 @@ namespace Checkers
     {
         private Piece[,] board = null;
 
-        private int initialFilledRowsForPlayer = 0;
-        private int InitialFilledRowsForPlayer
+        private static int initialFilledRowsForPlayer = 0;
+        public static int InitialFilledRowsForPlayer
         {
             get
             {
@@ -30,7 +30,7 @@ namespace Checkers
 
                 else
                 {
-                    initialFilledRowsForPlayer = 10;
+                    initialFilledRowsForPlayer = 8;
                 }
             }
         }
