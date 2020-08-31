@@ -41,8 +41,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CheckersModel.cs" />
-    <Compile Include="Game.cs" />
+    <Compile Include="GameView.cs" />
+    <Compile Include="Model\e_PlayerID.cs" />
+    <Compile Include="Model\Board.cs" />
+    <Compile Include="GameMain.cs" />
+    <Compile Include="Model\Game.cs" />
+    <Compile Include="Model\Piece.cs" />
+    <Compile Include="Model\Player.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

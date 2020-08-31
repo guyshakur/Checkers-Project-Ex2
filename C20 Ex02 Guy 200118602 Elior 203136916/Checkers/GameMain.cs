@@ -3,28 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Checkers.Model;
 using Ex02.ConsoleUtils;
 
 
 namespace Checkers
 {
-    class Game
+    class GameMain
     {
-        private static string player1Name;
+        public static Player Player1 { get; set; }
+        public static Player Player2 { get; set; }
         private static int boardSize;
         private static int numOfPlayers;
-        private static string player2Name = null;
 
         public static void Main()
         {
-
-            Console.WriteLine("         Checkers Game");
-            Console.WriteLine();
-
+            initiaizeGame();
             getUserInitialInput();
-            Screen.Clear();
+             
 
-            CheckersModel model = new CheckersModel(boardSize);
+
+            Player1 = new Player(e_PlayerID.FIRST);
+            Player2 = new Player(e_PlayerID.SECOND);
+            Game game = new Game();
+
+            
+
+            Screen.Clear();
+            Board model = new Board(boardSize,Player1,Player2);
             string boardHeader = "   A   B   C   D   E   F   G   H   I   J";
             Console.WriteLine(" " + boardHeader.Substring(0, boardSize * 4));
             Console.WriteLine("  " + new String('=', boardSize * 4 + 1));
@@ -37,13 +43,44 @@ namespace Checkers
                 for (int x = 0; x < boardSize; x++)
                 {
 
-                    Console.Write(" " + model.getCell(x, y) + " ");
+                    Console.Write(" " + getCellAsString(model.getCellContent(x, y)) + " ");
                     Console.Write("|");
+                }
+                if(y==0)
+                { 
+                    Console.Write("  Player2: " + Player2.Name); 
+                }
+                if (y == boardSize-1)
+                {
+                    Console.Write("  Player1: " + Player1.Name);
                 }
                 Console.WriteLine();
                 Console.WriteLine("  " + new String('=', boardSize * 4 + 1));
             }
+            Console.WriteLine();
+            Console.Write(Player1.Name + "'s turn :");
+            Console.WriteLine();
 
+        }
+
+        private static string getCellAsString(Piece gamePiece)
+        {
+            if(gamePiece==null)
+            {
+                return " ";
+            }
+            else if(gamePiece.Player.ID==e_PlayerID.FIRST)
+            {
+                return gamePiece.Rank==e_Rank.SOLDIER ? "X" : "K";
+            }
+            else if (gamePiece.Player.ID == e_PlayerID.SECOND)
+            {
+                return gamePiece.Rank == e_Rank.SOLDIER ? "O" : "U";
+            }
+            else
+            {
+                return ".";
+            }
 
         }
 
@@ -71,40 +108,9 @@ namespace Checkers
             return result;
         }
 
-        public static void getUserInitialInput()
-        {
-
-
-            player1Name = getStringFromUser("Enter your name (not more than 20 characters and without spaces): ");
-
-
-            boardSize = getIntFromUser("Choose board size (6,8,10): ", 6, 8, 10);
-
-            numOfPlayers = getIntFromUser("Enter number of players (1,2): ", 1, 2);
-
-            if (numOfPlayers == 2)
-            {
-                player2Name = getStringFromUser("Enter player 2 name (not more than 20 characters and without spaces):");
-            }
-        }
-        private static string getStringFromUser(string msg)
-        {
-            string result = "";
-            bool validStr = false;
-            while (!validStr)
-            {
-                Console.Write(msg);
-                result = Console.ReadLine();
-                if (!(result.Contains(' ')) && result.Length <= 20)
-                {
-                    validStr = true;
-                }
-
-            }
-            return result;
-        }
-
        
-        
+
+
+
     }
 }

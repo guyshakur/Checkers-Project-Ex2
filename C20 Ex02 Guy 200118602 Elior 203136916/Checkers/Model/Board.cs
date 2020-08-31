@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Checkers.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -8,9 +9,9 @@ using System.Threading.Tasks;
 namespace Checkers
 {
 
-    class CheckersModel
+    class Board
     {
-        private char[,] board = null;
+        private Piece[,] board = null;
 
         private int initialFilledRowsForPlayer = 0;
         private int InitialFilledRowsForPlayer
@@ -33,9 +34,9 @@ namespace Checkers
                 }
             }
         }
-        public CheckersModel(int boardSize)
+        public Board(int boardSize,Player player1,Player player2)
         {
-            board = new char[boardSize, boardSize];
+            board = new Piece[boardSize, boardSize];
 
             initialFilledRowsForPlayer = (boardSize - 2) / 2;
 
@@ -45,7 +46,7 @@ namespace Checkers
             {
                 for (int x = 0; x < boardSize; x++)
                 {
-                    board[x, y] = ' ';
+                    board[x, y] = null;
                 }
             }
 
@@ -56,11 +57,11 @@ namespace Checkers
                 {
                     if (fillEvenCells)
                     {
-                        board[x, y] = (x % 2 == 0) ? 'O' : ' ';
+                        board[x, y] = (x % 2 == 0) ? new Piece(player2,this,x,y) : null;
                     }
                     else
                     {
-                        board[x, y] = (x % 2 == 0) ? ' ' : 'O';
+                        board[x, y] = (x % 2 == 0) ? null : new Piece(player2, this, x, y);
                     }
                 }
             }
@@ -73,11 +74,11 @@ namespace Checkers
                 {
                     if (fillEvenCells)
                     {
-                        board[x, y] = (x % 2 == 0) ? 'X' : ' ';
+                        board[x, y] = (x % 2 == 0) ? new Piece(player1, this, x, y) : null;
                     }
                     else
                     {
-                        board[x, y] = (x % 2 == 0) ? ' ' : 'X';
+                        board[x, y] = (x % 2 == 0) ? null : new Piece(player1, this, x, y);
                     }
                 }
             }
@@ -85,7 +86,7 @@ namespace Checkers
 
         }
 
-        public char getCell(int x, int y)
+        public Piece getCellContent(int x, int y)
         {
 
             return board[x, y];
