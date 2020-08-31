@@ -10,9 +10,10 @@ namespace Checkers
 {
     class Game
     {
-        private static string playerName;
+        private static string player1Name;
         private static int boardSize;
         private static int numOfPlayers;
+        private static string player2Name = null;
 
         public static void Main()
         {
@@ -74,13 +75,17 @@ namespace Checkers
         {
 
 
-            playerName = getStringFromUser("Enter your name (20 characters and no spaces): ");
+            player1Name = getStringFromUser("Enter your name (not more than 20 characters and without spaces): ");
 
 
             boardSize = getIntFromUser("Choose board size (6,8,10): ", 6, 8, 10);
 
             numOfPlayers = getIntFromUser("Enter number of players (1,2): ", 1, 2);
 
+            if (numOfPlayers == 2)
+            {
+                player2Name = getStringFromUser("Enter player 2 name (not more than 20 characters and without spaces):");
+            }
         }
         private static string getStringFromUser(string msg)
         {
@@ -98,5 +103,8 @@ namespace Checkers
             }
             return result;
         }
+
+       
+        
     }
 }
