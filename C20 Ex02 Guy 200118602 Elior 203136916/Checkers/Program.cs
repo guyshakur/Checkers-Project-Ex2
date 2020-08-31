@@ -9,7 +9,7 @@ using Ex02.ConsoleUtils;
 
 namespace Checkers
 {
-    class GameMain
+    class Program
     {
         public static Player Player1 { get; set; }
         public static Player Player2 { get; set; }
@@ -63,25 +63,23 @@ namespace Checkers
 
         }
 
-        private static string getCellAsString(Piece gamePiece)
+        private static string getCellAsString(Piece i_GamePiece)
         {
-            if(gamePiece==null)
+            string stringReturn = '.';
+            if(i_GamePiece==null)
             {
-                return " ";
+                stringReturn  = " ";
             }
-            else if(gamePiece.Player.ID==e_PlayerID.FIRST)
+            else if(i_GamePiece.Player.ID==e_PlayerID.FIRST)
             {
-                return gamePiece.Rank==e_Rank.SOLDIER ? "X" : "K";
+                stringReturn  = i_GamePiece.Rank==e_Rank.SOLDIER ? "X" : "K";
             }
-            else if (gamePiece.Player.ID == e_PlayerID.SECOND)
+            else if (i_GamePiece.Player.ID == e_PlayerID.SECOND)
             {
-                return gamePiece.Rank == e_Rank.SOLDIER ? "O" : "U";
+                stringReturn  = i_GamePiece.Rank == e_Rank.SOLDIER ? "O" : "U";
             }
-            else
-            {
-                return ".";
-            }
-
+            
+            return stringReturn;
         }
 
         private static int getIntFromUser(string msg, params int[] validInputs)
@@ -92,7 +90,6 @@ namespace Checkers
             {
                 Console.Write(msg);
                 string numAsStr = Console.ReadLine();
-
                 if (Int32.TryParse(numAsStr, out result))
                 {
                     foreach (int validInput in validInputs)
@@ -107,10 +104,5 @@ namespace Checkers
             }
             return result;
         }
-
-       
-
-
-
     }
 }
