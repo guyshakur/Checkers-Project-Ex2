@@ -11,24 +11,22 @@ namespace Checkers
 {
     class Program
     {
-        public static Player Player1 { get; set; }
-        public static Player Player2 { get; set; }
         private static int boardSize;
         private static int numOfPlayers;
 
+        public static Player Player1 { get; set; }
+        public static Player Player2 { get; set; }
+        
+
         public static void Main()
         {
-            initiaizeGame();
-            getUserInitialInput();
-             
-
-
+            GameView.initiaizeGame();
+            //GameView.getUserInitialInput();
+            
             Player1 = new Player(e_PlayerID.FIRST);
             Player2 = new Player(e_PlayerID.SECOND);
             Game game = new Game();
-
             
-
             Screen.Clear();
             Board model = new Board(boardSize,Player1,Player2);
             string boardHeader = "   A   B   C   D   E   F   G   H   I   J";
@@ -65,7 +63,7 @@ namespace Checkers
 
         private static string getCellAsString(Piece i_GamePiece)
         {
-            string stringReturn = '.';
+            string stringReturn = ".";
             if(i_GamePiece==null)
             {
                 stringReturn  = " ";

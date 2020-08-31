@@ -36,19 +36,18 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Ex02.ConsoleUtils">
-      <HintPath>..\..\..\..\..\..\..\Temp\Ex02.ConsoleUtils.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="GameView.cs" />
     <Compile Include="Model\e_PlayerID.cs" />
     <Compile Include="Model\Board.cs" />
-    <Compile Include="GameMain.cs" />
     <Compile Include="Model\Game.cs" />
     <Compile Include="Model\Piece.cs" />
     <Compile Include="Model\Player.cs" />
+    <Compile Include="Program.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="Ex02.ConsoleUtils">
+      <HintPath>..\..\..\..\..\..\..\..\temp\Ex02.ConsoleUtils.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
