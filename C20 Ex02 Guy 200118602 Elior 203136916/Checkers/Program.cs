@@ -98,6 +98,8 @@ namespace Checkers
 			//i_ThePlayerIsTurn.
 			///we need to call func in model to check if the move is good and move the soldier in board.
 			///and in thr fun to call to PrintBoard after the soldier moved.
+			///
+			i_ThePlayerIsTurn.movePiece(board, (int)turn[0] - 'A' + 1, (int)turn[1] - 'a' + 1, (int)turn[3] - 'A' + 1, (int)turn[4] - 'a' + 1);
 		}
 		private static void PrintBoard(Player i_ThePlayerIsNextTurn)
 		{

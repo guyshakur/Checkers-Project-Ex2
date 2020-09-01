@@ -8,23 +8,55 @@ namespace Checkers.Model
 {
     class Player
     {
-        private String name;
-        public Board Board { get; set; }
-        public e_PlayerID ID { get; set; }
-        //public String Name { get; set; }
-        public double Score { get; set; }
+        private String m_Name;
+        private Board m_Board;
+        private e_PlayerID m_ID;
+        private double m_Score;
 
-        public Player(e_PlayerID i_PlayerID,Board board)
+        public Board Board {
+            get 
+            {
+                return m_Board;
+            }
+            set
+			{
+                m_Board = value;
+			}
+        }
+        public e_PlayerID ID 
         {
-            this.ID = i_PlayerID;
-            this.Board = board;
+            get
+            {
+                return m_ID;
+            }
+            set
+            {
+                m_ID = value;
+            }
+        }
+        public double Score 
+        {
+            get
+            {
+                return m_Score;
+            }
+            set
+            {
+                m_Score = value;
+            }
+        }
+
+        public Player(e_PlayerID i_PlayerID,Board i_Board)
+        {
+            ID = i_PlayerID;
+            Board = i_Board;
         }
         
         public void movePiece(Board board,int oldX,int oldY,int newX,int newY)
         {
 
             this.Board = board;
-            if (isValidMove)
+            if (Board.ChecksIfLegalMove(this, oldX, oldY, newX, newY))
                 Board.updateBoardGame(this, oldX, oldY, newX, newY);
 
             else
@@ -41,14 +73,14 @@ namespace Checkers.Model
         {
             get 
             { 
-                return name; 
+                return m_Name; 
             }
 
             set
             {
-                if (name == null)
+                if (m_Name == null)
                 {
-                    name = value;
+                    m_Name = value;
                 }
             }
         }
