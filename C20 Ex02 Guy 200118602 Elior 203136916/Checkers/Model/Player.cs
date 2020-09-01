@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Checkers.Model
 {
+    enum e_PlayerID { FIRST, SECOND }
     class Player
     {
         private String m_Name;
@@ -46,18 +43,18 @@ namespace Checkers.Model
             }
         }
 
-        public Player(e_PlayerID i_PlayerID,Board i_Board)
+        public Player(e_PlayerID i_PlayerID, Board i_Board)
         {
             ID = i_PlayerID;
             Board = i_Board;
         }
         
-        public void movePiece(Board board,int oldX,int oldY,int newX,int newY)
+        public void movePiece(Board i_Board, int i_OldX, int i_OldY, int i_NewX, int i_NewY)
         {
 
-            this.Board = board;
-            if (Board.ChecksIfLegalMove(this, oldX, oldY, newX, newY))
-                Board.updateBoardGame(this, oldX, oldY, newX, newY);
+            Board = i_Board;
+            if (Board.ChecksIfLegalMove(this, i_OldX, i_OldY, i_NewX, i_NewY))
+                Board.UpdateBoardGame(this, i_OldX, i_OldY, i_NewX, i_NewY);
 
             else
             {

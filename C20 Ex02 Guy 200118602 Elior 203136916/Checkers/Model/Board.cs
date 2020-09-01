@@ -1,10 +1,5 @@
 ﻿using Checkers.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Checkers
 {
@@ -13,72 +8,72 @@ namespace Checkers
 	{
 		public static Piece[,] BoardGame { get; set; }
 
-		private static int initialFilledRowsForPlayer = 0;
+		private static int s_initialFilledRowsForPlayer = 0;
 		public static int InitialFilledRowsForPlayer
 		{
 			get
 			{
-				return initialFilledRowsForPlayer;
+				return s_initialFilledRowsForPlayer;
 			}
 
 			set
 			{
 				if (value == 10 || value == 8 || value == 6)
 				{
-					initialFilledRowsForPlayer = value;
+					s_initialFilledRowsForPlayer = value;
 				}
 
 				else
 				{
-					initialFilledRowsForPlayer = 8;
+					s_initialFilledRowsForPlayer = 8;
 				}
 			}
 		}
-		public Board(int boardSize, Player player1, Player player2)
+		public Board(int i_BoardSize, Player i_Player1, Player i_Player2)
 		{
-			BoardGame = new Piece[boardSize, boardSize];
+			BoardGame = new Piece[i_BoardSize, i_BoardSize];
 
-			initialFilledRowsForPlayer = (boardSize - 2) / 2;
+			InitialFilledRowsForPlayer = (i_BoardSize - 2) / 2;
 
 			bool fillEvenCells = true;
 
-			for (int y = 0; y < boardSize; y++)
+			for (int y = 0; y < i_BoardSize; y++)
 			{
-				for (int x = 0; x < boardSize; x++)
+				for (int x = 0; x < i_BoardSize; x++)
 				{
 					BoardGame[x, y] = null;
 				}
 			}
 
-			for (int y = 0; y < initialFilledRowsForPlayer; y++)
+			for (int y = 0; y < InitialFilledRowsForPlayer; y++)
 			{
 				fillEvenCells = (((y + 1) % 2) == 0);
-				for (int x = 0; x < boardSize; x++)
+				for (int x = 0; x < i_BoardSize; x++)
 				{
 					if (fillEvenCells)
 					{
-						BoardGame[x, y] = (x % 2 == 0) ? new Piece(player2, x, y) : null;
+						BoardGame[x, y] = (x % 2 == 0) ? new Piece(i_Player2, x, y) : null;
 					}
 					else
 					{
-						BoardGame[x, y] = (x % 2 == 0) ? null : new Piece(player2, x, y);
+						BoardGame[x, y] = (x % 2 == 0) ? null : new Piece(i_Player2, x, y);
 					}
 				}
 			}
 
 
-			for (int y = boardSize - 1; y > boardSize - initialFilledRowsForPlayer - 1; y--)
+			for (int y = i_BoardSize - 1; y > i_BoardSize - InitialFilledRowsForPlayer - 1; y--)
 			{
-				fillEvenCells = (boardSize - 1 - y) % 2 == 0;
-				for (int x = 0; x < boardSize; x++)
+				fillEvenCells = (i_BoardSize - 1 - y) % 2 == 0;
+				for (int x = 0; x < i_BoardSize; x++)
 				{
 					if (fillEvenCells)
 					{
-						BoardGame[x, y] = (x % 2 == 0) ? new Piece(player1, x, y) : null;
+						BoardGame[x, y] = (x % 2 == 0) ? new Piece(i_Player1, x, y) : null;
 					}
 					else
 					{
-						BoardGame[x, y] = (x % 2 == 0) ? null : new Piece(player1, x, y);
+						BoardGame[x, y] = (x % 2 == 0) ? null : new Piece(i_Player1, x, y);
 					}
 				}
 			}
@@ -86,16 +81,16 @@ namespace Checkers
 
 		}
 
-		public Piece getCellContent(int x, int y)
+		public Piece getCellContent(int i_X, int i_Y)
 		{
 
-			return BoardGame[x, y];
+			return BoardGame[i_X, i_Y];
 		}
 
-		public void updateBoardGame(Player player, int oldX, int oldY, int newX, int newY)
+		public void UpdateBoardGame(Player i_Player, int i_OldX, int i_OldY, int i_NewX, int i_NewY)
 		{
-			BoardGame[oldX, oldY] = null;
-			BoardGame[newX, newY] = new Piece(player, newX, newY);
+			BoardGame[i_OldX, i_OldY] = null;
+			BoardGame[i_NewX, i_NewY] = new Piece(i_Player, i_NewX, i_NewY);
 		}
 
 

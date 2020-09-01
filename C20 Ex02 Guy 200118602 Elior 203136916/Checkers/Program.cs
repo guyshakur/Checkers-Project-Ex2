@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Checkers.Model;
 using Ex02.ConsoleUtils;
 
@@ -11,27 +8,51 @@ namespace Checkers
 {
 	class Program
 	{
-		private static Board board;
-		private static int boardSize;
-		private static int numOfPlayers;
-		private static Player player1;
-		private static Player player2;
+		private static Board s_Board;
+		private static int s_BoardSize;
+		private static int s_NumOfPlayers;
+		private static Player s_Player1;
+		private static Player s_Player2;
 
+		public static Board Board
+		{
+			get
+			{
+				return s_Board;
+			}
+			set
+			{
+				s_Board = value;
+			}
+			
+		}
+		public static int BoardSize
+		{
+			get
+			{
+				return s_BoardSize;
+			}
+			set
+			{
+				s_BoardSize = value;
+			}
+
+		}
 		public static int NumOfPlayers 
 		{ 
 			get 
 			{ 
-				return numOfPlayers; 
+				return s_NumOfPlayers; 
 			}
 			set
 			{
 				if(value == 1 || value == 2)
 				{
-					numOfPlayers = value;
+					s_NumOfPlayers = value;
 				}
 				else
 				{
-					numOfPlayers = 1;
+					s_NumOfPlayers = 1;
 				}
 			}
 		}
@@ -40,7 +61,11 @@ namespace Checkers
 		{
 			get
 			{
-				return player1;
+				return s_Player1;
+			}
+			set
+			{
+				s_Player1 = value;
 			}
 		}
 
@@ -48,7 +73,11 @@ namespace Checkers
 		{
 			get
 			{
-				return player2;
+				return s_Player2;
+			}
+			set
+			{
+				s_Player2 = value;
 			}
 		}
 
@@ -61,18 +90,18 @@ namespace Checkers
 		private static void checkers()
 		{
 			
-			player1 = new Player(e_PlayerID.FIRST,board);
-			player2 = new Player(e_PlayerID.SECOND,board);
+			Player1 = new Player(e_PlayerID.FIRST,Board);
+			Player2 = new Player(e_PlayerID.SECOND,Board);
 
-			GameView.initiaizeGame();
+			GameView.InitiaizeGame();
 
 			Game game = new Game();
-			boardSize = Board.InitialFilledRowsForPlayer;
-			board = new Board(boardSize, Player1, Player2);
+			BoardSize = Board.InitialFilledRowsForPlayer;
+			Board = new Board(BoardSize, Player1, Player2);
 			PrintBoard(Player1);
 			
 		}
-		private static void NextTurn(Player i_ThePlayerIsTurn)
+		private static void nextTurn(Player i_ThePlayerIsTurn)
 		{
 			String turn;
 			bool checkIfReadGood;
@@ -85,11 +114,11 @@ namespace Checkers
 					i_ThePlayerIsTurn.Quit();   
 				}
 				if(turn.Length!=5 || 
-					turn[0] < 'A' || turn[0] > (char)(boardSize + (int)'A' -1) ||
-					turn[1] < 'a' || turn[1] > (char)(boardSize + (int)'a' -1) ||
+					turn[0] < 'A' || turn[0] > (char)(BoardSize + (int)'A' -1) ||
+					turn[1] < 'a' || turn[1] > (char)(BoardSize + (int)'a' -1) ||
 					turn[2] != '>' ||
-					turn[3] < 'A' || turn[3] > (char)(boardSize + (int)'A' -1)||
-					turn[4] < 'a' || turn[4] > (char)(boardSize + (int)'a' -1))
+					turn[3] < 'A' || turn[3] > (char)(BoardSize + (int)'A' -1)||
+					turn[4] < 'a' || turn[4] > (char)(BoardSize + (int)'a' -1))
 				{
 					checkIfReadGood = false;
 					Console.WriteLine("The move is wrong please try again:");
@@ -99,57 +128,42 @@ namespace Checkers
 			///we need to call func in model to check if the move is good and move the soldier in board.
 			///and in thr fun to call to PrintBoard after the soldier moved.
 			///
-			i_ThePlayerIsTurn.movePiece(board, (int)turn[0] - 'A' + 1, (int)turn[1] - 'a' + 1, (int)turn[3] - 'A' + 1, (int)turn[4] - 'a' + 1);
+			i_ThePlayerIsTurn.movePiece(Board, (int)turn[0] - 'A' + 1, (int)turn[1] - 'a' + 1, (int)turn[3] - 'A' + 1, (int)turn[4] - 'a' + 1);
 		}
 		private static void PrintBoard(Player i_ThePlayerIsNextTurn)
 		{
 			Screen.Clear();			
 			string boardHeader = "   A   B   C   D   E   F   G   H   I   J";
 			StringBuilder paint = new StringBuilder("");
-			//player1.movePiece(board,5,4,4,3);
-			paint.AppendLine(" " + boardHeader.Substring(0, boardSize * 4));
-			//Console.WriteLine(" " + boardHeader.Substring(0, boardSize * 4));
-			paint.AppendLine("  " + new String('=', boardSize * 4 + 1));
-			//Console.WriteLine("  " + new String('=', boardSize * 4 + 1));
-
+			paint.AppendLine(" " + boardHeader.Substring(0, BoardSize * 4));
+			paint.AppendLine("  " + new String('=', BoardSize * 4 + 1));
 
 			string boardSideHeader = "abcdefghij";
-			for (int y = 0; y < boardSize; y++)
+			for (int y = 0; y < BoardSize; y++)
 			{
 				paint.Append(boardSideHeader.Substring(y, 1) + " ");
-				//Console.Write(boardSideHeader.Substring(y, 1) + " ");
 				paint.Append("|");
-				//Console.Write("|");
-				for (int x = 0; x < boardSize; x++)
+				for (int x = 0; x < BoardSize; x++)
 				{
-					paint.Append(" " + getCellAsString(board.getCellContent(x, y)) + " ");
-					//Console.Write(" " + getCellAsString(model.getCellContent(x, y)) + " ");
+					paint.Append(" " + getCellAsString(Board.getCellContent(x, y)) + " ");
 					paint.Append("|");
-					//Console.Write("|");
 				}
 				if (y == 0)
 				{
 					paint.Append("  Player2: " + Player2.Name);
-					//Console.Write("  Player2: " + Player2.Name); 
 				}
-				if (y == boardSize - 1)
+				if (y == BoardSize - 1)
 				{
 					paint.Append("  Player1: " + Player1.Name);
-					//Console.Write("  Player1: " + Player1.Name);
 				}
 				paint.AppendLine();
-				//Console.WriteLine();
-				paint.AppendLine("  " + new String('=', boardSize * 4 + 1));
-				//Console.WriteLine("  " + new String('=', boardSize * 4 + 1));
+				paint.AppendLine("  " + new String('=', BoardSize * 4 + 1));
 			}
 			paint.AppendLine();
-			//Console.WriteLine();
 			paint.Append(i_ThePlayerIsNextTurn.Name + "'s turn :");
-			//Console.Write(Player1.Name + "'s turn :");
 			paint.AppendLine();
-			//Console.WriteLine();
 			Console.WriteLine(paint);
-			NextTurn(i_ThePlayerIsNextTurn);
+			nextTurn(i_ThePlayerIsNextTurn);
 		}
 
 		private static string getCellAsString(Piece i_GamePiece)
@@ -168,31 +182,7 @@ namespace Checkers
 			{
 				stringReturn  = i_GamePiece.Rank == e_Rank.SOLDIER ? "O" : "U";
 			}
-			
 			return stringReturn;
-		}
-
-		private static int getIntFromUser(string msg, params int[] validInputs)
-		{
-			int result = 0;
-			bool validNum = false;
-			while (!validNum)
-			{
-				Console.Write(msg);
-				string numAsStr = Console.ReadLine();
-				if (Int32.TryParse(numAsStr, out result))
-				{
-					foreach (int validInput in validInputs)
-					{
-						if (result == validInput)
-						{
-							validNum = true;
-						}
-					}
-
-				}
-			}
-			return result;
 		}
 	}
 }
