@@ -11,6 +11,7 @@ namespace Checkers
 {
 	class Program
 	{
+		private static Board board;
 		private static int boardSize;
 		private static int numOfPlayers;
 		private static Player player1;
@@ -60,14 +61,14 @@ namespace Checkers
 		private static void checkers()
 		{
 			
-			player1 = new Player(e_PlayerID.FIRST);
-			player2 = new Player(e_PlayerID.SECOND);
+			player1 = new Player(e_PlayerID.FIRST,board);
+			player2 = new Player(e_PlayerID.SECOND,board);
 
 			GameView.initiaizeGame();
 
 			Game game = new Game();
 			boardSize = Board.InitialFilledRowsForPlayer;
-
+			board = new Board(boardSize, Player1, Player2);
 			PrintBoard(Player1);
 			
 		}
@@ -100,11 +101,10 @@ namespace Checkers
 		}
 		private static void PrintBoard(Player i_ThePlayerIsNextTurn)
 		{
-			Screen.Clear();
-			Board model = new Board(boardSize, Player1, Player2);
+			Screen.Clear();			
 			string boardHeader = "   A   B   C   D   E   F   G   H   I   J";
 			StringBuilder paint = new StringBuilder("");
-
+			//player1.movePiece(board,5,4,4,3);
 			paint.AppendLine(" " + boardHeader.Substring(0, boardSize * 4));
 			//Console.WriteLine(" " + boardHeader.Substring(0, boardSize * 4));
 			paint.AppendLine("  " + new String('=', boardSize * 4 + 1));
@@ -120,7 +120,7 @@ namespace Checkers
 				//Console.Write("|");
 				for (int x = 0; x < boardSize; x++)
 				{
-					paint.Append(" " + getCellAsString(model.getCellContent(x, y)) + " ");
+					paint.Append(" " + getCellAsString(board.getCellContent(x, y)) + " ");
 					//Console.Write(" " + getCellAsString(model.getCellContent(x, y)) + " ");
 					paint.Append("|");
 					//Console.Write("|");

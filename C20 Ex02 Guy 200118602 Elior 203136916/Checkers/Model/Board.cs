@@ -11,7 +11,7 @@ namespace Checkers
 
     class Board
     {
-        private Piece[,] board = null;
+        public Piece[,] BoardGame { get; set; }
 
         private static int initialFilledRowsForPlayer = 0;
         public static int InitialFilledRowsForPlayer
@@ -36,7 +36,7 @@ namespace Checkers
         }
         public Board(int boardSize,Player player1,Player player2)
         {
-            board = new Piece[boardSize, boardSize];
+            BoardGame = new Piece[boardSize, boardSize];
 
             initialFilledRowsForPlayer = (boardSize - 2) / 2;
 
@@ -46,7 +46,7 @@ namespace Checkers
             {
                 for (int x = 0; x < boardSize; x++)
                 {
-                    board[x, y] = null;
+                    BoardGame[x, y] = null;
                 }
             }
 
@@ -57,11 +57,11 @@ namespace Checkers
                 {
                     if (fillEvenCells)
                     {
-                        board[x, y] = (x % 2 == 0) ? new Piece(player2,this,x,y) : null;
+                        BoardGame[x, y] = (x % 2 == 0) ? new Piece(player2) : null;
                     }
                     else
                     {
-                        board[x, y] = (x % 2 == 0) ? null : new Piece(player2, this, x, y);
+                        BoardGame[x, y] = (x % 2 == 0) ? null : new Piece(player2);
                     }
                 }
             }
@@ -74,11 +74,11 @@ namespace Checkers
                 {
                     if (fillEvenCells)
                     {
-                        board[x, y] = (x % 2 == 0) ? new Piece(player1, this, x, y) : null;
+                        BoardGame[x, y] = (x % 2 == 0) ? new Piece(player1) : null;
                     }
                     else
                     {
-                        board[x, y] = (x % 2 == 0) ? null : new Piece(player1, this, x, y);
+                        BoardGame[x, y] = (x % 2 == 0) ? null : new Piece(player1);
                     }
                 }
             }
@@ -89,10 +89,22 @@ namespace Checkers
         public Piece getCellContent(int x, int y)
         {
 
-            return board[x, y];
+            return BoardGame[x, y];
+        }
+
+        public void updateBoardGame(Player player,int oldX,int oldY,int newX,int newY)
+        {
+            BoardGame[oldX, oldY] = null;
+            BoardGame[newX, newY] = new Piece(player);
         }
 
 
+        public static bool ChecksIfLegalMove()
+        {
+            return false;
+        }
+
+        
 
     }
 }
