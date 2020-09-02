@@ -100,36 +100,7 @@ namespace Checkers
             BoardGame[newX, newY] = getCellContent(oldX, oldY);
             BoardGame[oldX, oldY] = null;
 
-            //if the player is on the "kingdom" row he should be a king now.
-            //if ((player.ID == e_PlayerID.FIRST && newY == 0) || (player.ID == e_PlayerID.SECOND && newY == BoardSize - 1))
-            //{
-            //    BoardGame[newX, newY].Rank = e_Rank.KING;
-           // }
-
-            //update if it had eaten for player 2
-           // if (oldX+1<BoardSize-1 && oldY+1<BoardSize-1 && getCellContent(newX+1,newY+1)!=null)
-          //  {
-           //     if(getCellContent(oldX+1,oldY+1).Player.ID!=player.ID)
-            //    {
-                //    BoardGame[oldX + 1, oldY + 1] = null;
-              //  }
-           // }
-
-           // else if (oldX - 1 > 0  && oldY + 1 < BoardSize - 1 && getCellContent(oldX - 1, oldY + 1) != null)
-           // {
-             //   if (getCellContent(oldX - 1, oldY + 1).Player.ID != player.ID)
-              //  {
-              //      BoardGame[oldX - 1, oldY + 1] = null;
-              //  }
-            }
-
-            //update if it had eaten for player 2
-            //if (newX+1 < BoardSize-1 && newY-1 > 0 && getCellContent(newX - 1, newY - 1) != null)
-            //{
-
-            //    BoardGame[newX + 1, newY - 1] = null; 
-            // }
-
+          
         }
 
 
@@ -137,5 +108,5 @@ namespace Checkers
 
 
 
-    }
+   }
 }
