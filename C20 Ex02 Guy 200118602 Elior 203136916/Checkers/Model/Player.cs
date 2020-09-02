@@ -78,10 +78,68 @@ namespace Checkers.Model
 				return e_PlayerID.SECOND;
 			}
 		}
-		private bool haveAJump(out List<int> o_CurrentPlace, out List<int> o_NextPlace)
+		private void checkInPieceIfCanTOEat(int i_X, int i_Y, ref List<int> io_CurrentPlace, ref List<int> io_NextPlace)
 		{
-			bool have = false;
 			int moveSoldierUpOrDown = ID == e_PlayerID.FIRST ? 1 : -1;
+
+			if (Board.getCellContent(i_X, i_Y).Rank == e_Rank.SOLDIER)
+			{
+				if (Board.getCellContent(i_X + 1, i_Y + moveSoldierUpOrDown) != null
+					&& Board.getCellContent(i_X + 1, i_Y + moveSoldierUpOrDown).Player.ID != ID)
+				{
+					io_CurrentPlace.Add(i_X);
+					io_CurrentPlace.Add(i_Y);
+					io_NextPlace.Add(i_X + 2);
+					io_NextPlace.Add(i_Y + 2 * moveSoldierUpOrDown);
+				}
+				else if (Board.getCellContent(i_X - 1, i_Y + moveSoldierUpOrDown) != null
+					&& Board.getCellContent(i_X - 1, i_Y + moveSoldierUpOrDown).Player.ID != ID)
+				{
+					io_CurrentPlace.Add(i_X);
+					io_CurrentPlace.Add(i_Y);
+					io_NextPlace.Add(i_X - 2);
+					io_NextPlace.Add(i_Y - 2 * moveSoldierUpOrDown);
+				}
+			}
+			else if (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING)
+			{
+				if (Board.getCellContent(i_X + 1, i_Y + 1) != null
+					&& Board.getCellContent(i_X + 1, i_Y + 1).Player.ID != ID)
+				{
+					io_CurrentPlace.Add(i_X);
+					io_CurrentPlace.Add(i_Y);
+					io_NextPlace.Add(i_X + 2);
+					io_NextPlace.Add(i_Y + 2);
+				}
+				else if (Board.getCellContent(i_X - 1, i_Y + 1) != null
+					&& Board.getCellContent(i_X - 1, i_Y + 1).Player.ID != ID)
+				{
+					io_CurrentPlace.Add(i_X);
+					io_CurrentPlace.Add(i_Y);
+					io_NextPlace.Add(i_X - 2);
+					io_NextPlace.Add(i_Y + 2);
+				}
+				else if (Board.getCellContent(i_X + 1, i_Y - 1) != null
+					&& Board.getCellContent(i_X + 1, i_Y - 1).Player.ID != ID)
+				{
+					io_CurrentPlace.Add(i_X);
+					io_CurrentPlace.Add(i_Y);
+					io_NextPlace.Add(i_X + 2);
+					io_NextPlace.Add(i_Y - 1);
+				}
+				else if (Board.getCellContent(i_X - 1, i_Y - 1) != null
+					&& Board.getCellContent(i_X - 1, i_Y - 1).Player.ID != ID)
+				{
+					io_CurrentPlace.Add(i_X);
+					io_CurrentPlace.Add(i_Y);
+					io_NextPlace.Add(j - 2);
+					io_NextPlace.Add(i_Y - 2);
+				}
+			}
+
+		}
+		private void runOnAllBoardGame(out List<int> o_CurrentPlace, out List<int> o_NextPlace)
+		{
 			o_CurrentPlace = new List<int>(0);
 			o_NextPlace = new List<int>(0);
 			
@@ -94,73 +152,11 @@ namespace Checkers.Model
 					{
 						if (Board.getCellContent(j, i).Player.ID == ID)
 						{
-							if (Board.getCellContent(j, i).Rank == e_Rank.SOLDIER)
-							{
-								if (Board.getCellContent(j + 1, i + moveSoldierUpOrDown) != null
-									&& Board.getCellContent(j + 1, i + moveSoldierUpOrDown).Player.ID != ID)
-								{
-									o_CurrentPlace.Add(j);
-									o_CurrentPlace.Add(i);
-									o_NextPlace.Add(j + 2);
-									o_NextPlace.Add(i + 2 * moveSoldierUpOrDown);
-									have = true;
-								}
-								else if (Board.getCellContent(j - 1, i + moveSoldierUpOrDown) != null
-									&& Board.getCellContent(j - 1, i + moveSoldierUpOrDown).Player.ID != ID)
-								{
-									o_CurrentPlace.Add(j);
-									o_CurrentPlace.Add(i);
-									o_NextPlace.Add(j - 2);
-									o_NextPlace.Add(i - 2 * moveSoldierUpOrDown);
-									have = true;
-								}
-							}
-							else if (Board.getCellContent(j, i).Rank == e_Rank.KING)
-							{
-								if (Board.getCellContent(j + 1, i + 1) != null
-									&& Board.getCellContent(j + 1, i + 1).Player.ID != ID)
-								{
-									o_CurrentPlace.Add(j);
-									o_CurrentPlace.Add(i);
-									o_NextPlace.Add(j + 2);
-									o_NextPlace.Add(i + 2);
-									have = true;
-								}
-								else if (Board.getCellContent(j - 1, i + 1) != null
-									&& Board.getCellContent(j - 1, i + 1).Player.ID != ID)
-								{
-									o_CurrentPlace.Add(j);
-									o_CurrentPlace.Add(i);
-									o_NextPlace.Add(j - 2);
-									o_NextPlace.Add(i + 2 );
-									have = true;
-								}
-								else if (Board.getCellContent(j + 1, i - 1 ) != null
-									&& Board.getCellContent(j + 1, i - 1).Player.ID != ID)
-								{
-									o_CurrentPlace.Add(j);
-									o_CurrentPlace.Add(i);
-									o_NextPlace.Add(j + 2);
-									o_NextPlace.Add(i - 1);
-									have = true;
-								}
-								else if (Board.getCellContent(j - 1, i - 1) != null
-									&& Board.getCellContent(j - 1, i - 1).Player.ID != ID)
-								{
-									o_CurrentPlace.Add(j);
-									o_CurrentPlace.Add(i);
-									o_NextPlace.Add(j - 2);
-									o_NextPlace.Add(i - 2 );
-									have = true;
-								}
-							}
+							checkInPieceIfCanTOEat(j, i, ref o_CurrentPlace, ref o_NextPlace);
 						}
 					}
 				}
-
 			}
-			
-			return have;
 		}
 
 		public bool hasAnyMoves()
