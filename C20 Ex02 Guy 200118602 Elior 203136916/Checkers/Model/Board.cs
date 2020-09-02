@@ -97,18 +97,39 @@ namespace Checkers
 
         public void updateBoardGame(Player player, int oldX, int oldY, int newX, int newY)
         {
+            BoardGame[newX, newY] = getCellContent(oldX, oldY);
             BoardGame[oldX, oldY] = null;
-            Piece p = new Piece(player);
 
-            if(BoardGame[oldX,oldY])
-            
             //if the player is on the "kingdom" row he should be a king now.
-            if((player.ID==e_PlayerID.FIRST && oldY==0)|| (player.ID == e_PlayerID.SECOND && oldY == BoardSize - 1))
+            if ((player.ID == e_PlayerID.FIRST && newY == 0) || (player.ID == e_PlayerID.SECOND && newY == BoardSize - 1))
             {
-                p.Rank = e_Rank.KING;
+                BoardGame[newX, newY].Rank = e_Rank.KING;
             }
-          
-            BoardGame[newX, newY] = p;
+
+            //update if it had eaten for player 2
+            if (oldX+1<BoardSize-1 && oldY+1<BoardSize-1 && getCellContent(newX+1,newY+1)!=null)
+            {
+                if(getCellContent(oldX+1,oldY+1).Player.ID!=player.ID)
+                {
+                    BoardGame[oldX + 1, oldY + 1] = null;
+                }
+            }
+
+            else if (newX - 1 > 0  && newY - 1 > 0 && getCellContent(newX - 1, newY - 1) != null)
+            {
+                if (getCellContent(newX - 1, newY - 1).Player.ID != player.ID)
+                {
+                    BoardGame[newX - 1, newY - 1] = null;
+                }
+            }
+
+            //update if it had eaten for player 2
+            //if (newX+1 < BoardSize-1 && newY-1 > 0 && getCellContent(newX - 1, newY - 1) != null)
+            //{
+
+            //    BoardGame[newX + 1, newY - 1] = null; 
+            // }
+
         }
 
 

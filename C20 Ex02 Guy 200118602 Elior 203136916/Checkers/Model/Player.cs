@@ -37,14 +37,6 @@ namespace Checkers.Model
 
 			Board.updateBoardGame(this, oldX, oldY, newX, newY);
 
-			//while(Board.ChecksIfLegalMove()==false)
-			// {
-			// Board.UnvalidMoveMessage("");
-			//
-
-			//}
-
-
 		}
 		public void Quit()
 		{
@@ -132,7 +124,7 @@ namespace Checkers.Model
 				{
 					io_CurrentPlace.Add(i_X);
 					io_CurrentPlace.Add(i_Y);
-					io_NextPlace.Add(j - 2);
+					io_NextPlace.Add(i_X - 2);
 					io_NextPlace.Add(i_Y - 2);
 				}
 			}
