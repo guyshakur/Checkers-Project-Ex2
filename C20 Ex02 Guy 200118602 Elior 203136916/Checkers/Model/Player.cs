@@ -1,65 +1,50 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Checkers.Model
 {
-    enum e_PlayerID { FIRST, SECOND }
+
+    public enum e_PlayerID { FIRST, SECOND }
     class Player
     {
-        private String m_Name;
-        private Board m_Board;
-        private e_PlayerID m_ID;
-        private double m_Score;
 
-        public Board Board {
-            get 
-            {
-                return m_Board;
-            }
-            set
-			{
-                m_Board = value;
-			}
-        }
-        public e_PlayerID ID 
-        {
-            get
-            {
-                return m_ID;
-            }
-            set
-            {
-                m_ID = value;
-            }
-        }
-        public double Score 
-        {
-            get
-            {
-                return m_Score;
-            }
-            set
-            {
-                m_Score = value;
-            }
-        }
-
-        public Player(e_PlayerID i_PlayerID, Board i_Board)
-        {
-            ID = i_PlayerID;
-            Board = i_Board;
-        }
         
-        public void movePiece(Board i_Board, int i_OldX, int i_OldY, int i_NewX, int i_NewY)
+        public int CountOfPiecesForPlayer { get; set; }
+
+        private String name;
+        public Board Board { get; set; }
+        public e_PlayerID ID { get; set; }
+
+        public double Score { get; set; }
+
+        public Player(e_PlayerID i_PlayerID)
+        {
+            this.ID = i_PlayerID;
+            //this.Board = board;
+            //CountOfPiecesForPlayer = ((board.BoardSize - 2) / 2) * (board.BoardSize / 2);
+
+
+        }
+
+        public void movePiece(Board board, int oldX, int oldY, int newX, int newY)
         {
 
-            Board = i_Board;
-            if (Board.ChecksIfLegalMove(this, i_OldX, i_OldY, i_NewX, i_NewY))
-                Board.UpdateBoardGame(this, i_OldX, i_OldY, i_NewX, i_NewY);
+            this.Board = board;
 
-            else
-            {
-                
-            }
+            Board.updateBoardGame(this, oldX, oldY, newX, newY);
+
+            //while(Board.ChecksIfLegalMove()==false)
+            // {
+            // Board.UnvalidMoveMessage("");
+            //
+
+            //}
+
+
         }
         public void Quit()
         {
@@ -68,18 +53,66 @@ namespace Checkers.Model
 
         public String Name
         {
-            get 
-            { 
-                return m_Name; 
+            get
+            {
+                return name;
             }
 
             set
             {
-                if (m_Name == null)
+                if (name == null)
                 {
-                    m_Name = value;
+                    name = value;
                 }
             }
+        }
+
+        public e_PlayerID GetOpponent(Player player)
+        {
+            if (player.ID == e_PlayerID.FIRST)
+            {
+                return e_PlayerID.SECOND;
+            }
+            else
+            {
+                return e_PlayerID.SECOND;
+            }
+        }
+
+        public bool hasAnyMoves()
+        {
+            return true;
+        }
+
+        public bool isValidMove(Board i_Board, int i_OldX, int i_OldY, int i_NewX, int i_NewY)
+        {
+
+            this.Board = i_Board;
+            if (Board.getCellContent(i_OldX, i_OldY) == null || Board.getCellContent(i_OldX, i_OldY).Player.ID != this.ID)
+            {
+                return false;
+            }
+            if (Board.getCellContent(i_NewX, i_NewY) != null)
+            {
+
+                return false;
+            }
+
+            if (Board.getCellContent(i_OldX, i_OldY).Rank == e_Rank.SOLDIER)
+            {
+                if ((ID == e_PlayerID.FIRST && i_NewY != i_OldY - 1 || ID == e_PlayerID.SECOND && i_NewY != i_OldY + 1) && (i_NewX != i_OldX + 1 || i_NewX != i_OldX - 1))
+                {
+
+                    return false;
+                }
+            }
+            else if((i_NewY != i_OldY - 1 || i_NewY!=i_OldY + 1) && (i_NewX != i_OldX + 1 || i_NewX != i_OldX - 1))
+            {
+
+                return false;
+            }
+
+            return true;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Checkers.Model;
 using Ex02.ConsoleUtils;
@@ -13,6 +14,9 @@ namespace Checkers
 		private static int s_NumOfPlayers;
 		private static Player s_Player1;
 		private static Player s_Player2;
+		private static Game s_Game;
+		private static string lastMoveStr=null;
+		private static string signOfPlayerPiece = null;
 
 		public static Board Board
 		{
@@ -85,52 +89,82 @@ namespace Checkers
 
 		public static void Main()
 		{
-			checkers(); 
+			checkersGame(); 
 		}
-		private static void checkers()
+		private static void checkersGame()
 		{
 			
-			Player1 = new Player(e_PlayerID.FIRST,Board);
-			Player2 = new Player(e_PlayerID.SECOND,Board);
+			Player1 = new Player(e_PlayerID.FIRST);
+			Player2 = new Player(e_PlayerID.SECOND);
 
 			GameView.InitiaizeGame();
 
-			Game game = new Game();
+			s_Game = new Game(Player1,Player2);
 			BoardSize = Board.InitialFilledRowsForPlayer;
 			Board = new Board(BoardSize, Player1, Player2);
-			PrintBoard(Player1);
 			
+			while(s_Game.PlayerTurn.hasAnyMoves())
+            {
+				PrintBoard();
+				playerMoveView(s_Game.PlayerTurn);
+			}
+
+			
+
 		}
-		private static void nextTurn(Player i_ThePlayerIsTurn)
+		private static void playerMoveView(Player i_ThePlayerIsTurn)
 		{
-			String turn;
+			if(i_ThePlayerIsTurn.ID== e_PlayerID.FIRST)
+            {
+				signOfPlayerPiece = "X";
+            }
+            else
+            {
+				signOfPlayerPiece = "O";
+
+			}
+			if (lastMoveStr != null)
+			{
+				Console.WriteLine(s_Game.GetOpponent(s_Game.PlayerTurn).Name + " Move's was " +"("+ signOfPlayerPiece+"): "+ lastMoveStr);
+			}
+
+			Console.WriteLine(i_ThePlayerIsTurn.Name + "'s Turn: "+"("+signOfPlayerPiece+")");
+			String MoveStrFromUser;
 			bool checkIfReadGood;
 			do
 			{
 				checkIfReadGood = true;
-				turn = Console.ReadLine();
-				if(turn.Contains("Q"))
+				MoveStrFromUser = Console.ReadLine();
+
+				if(MoveStrFromUser.Contains("Q"))
 				{
 					i_ThePlayerIsTurn.Quit();   
 				}
-				if(turn.Length!=5 || 
-					turn[0] < 'A' || turn[0] > (char)(BoardSize + (int)'A' -1) ||
-					turn[1] < 'a' || turn[1] > (char)(BoardSize + (int)'a' -1) ||
-					turn[2] != '>' ||
-					turn[3] < 'A' || turn[3] > (char)(BoardSize + (int)'A' -1)||
-					turn[4] < 'a' || turn[4] > (char)(BoardSize + (int)'a' -1))
+				if(MoveStrFromUser.Length!=5 || 
+					MoveStrFromUser[0] < 'A' || MoveStrFromUser[0] > (char)(BoardSize + (int)'A' -1) ||
+					MoveStrFromUser[1] < 'a' || MoveStrFromUser[1] > (char)(BoardSize + (int)'a' -1) ||
+					MoveStrFromUser[2] != '>' ||
+					MoveStrFromUser[3] < 'A' || MoveStrFromUser[3] > (char)(BoardSize + (int)'A' -1)||
+					MoveStrFromUser[4] < 'a' || MoveStrFromUser[4] > (char)(BoardSize + (int)'a' -1)
+					|| (!i_ThePlayerIsTurn.isValidMove(Board, (int)MoveStrFromUser[0]-(int)'A', (int)MoveStrFromUser[1] - (int)'a', (int)MoveStrFromUser[3] - 'A', (int)MoveStrFromUser[4] - 'a')))
+
 				{
+					
 					checkIfReadGood = false;
 					Console.WriteLine("The move is wrong please try again:");
 				}
+				
 			} while (!checkIfReadGood);
 			//i_ThePlayerIsTurn.
 			///we need to call func in model to check if the move is good and move the soldier in board.
 			///and in thr fun to call to PrintBoard after the soldier moved.
 			///
-			i_ThePlayerIsTurn.movePiece(Board, (int)turn[0] - 'A' + 1, (int)turn[1] - 'a' + 1, (int)turn[3] - 'A' + 1, (int)turn[4] - 'a' + 1);
+			i_ThePlayerIsTurn.movePiece(Board, (int)MoveStrFromUser[0]-(int)'A',(int)MoveStrFromUser[1]-(int)'a',(int)MoveStrFromUser[3]-'A',(int)MoveStrFromUser[4]-'a') ;
+			s_Game.PlayerTurn = s_Game.GetOpponent(i_ThePlayerIsTurn);
+			lastMoveStr = MoveStrFromUser;
+			PrintBoard();
 		}
-		private static void PrintBoard(Player i_ThePlayerIsNextTurn)
+		private static void PrintBoard()
 		{
 			Screen.Clear();			
 			string boardHeader = "   A   B   C   D   E   F   G   H   I   J";
@@ -160,11 +194,31 @@ namespace Checkers
 				paint.AppendLine("  " + new String('=', BoardSize * 4 + 1));
 			}
 			paint.AppendLine();
-			paint.Append(i_ThePlayerIsNextTurn.Name + "'s turn :");
 			paint.AppendLine();
 			Console.WriteLine(paint);
-			nextTurn(i_ThePlayerIsNextTurn);
+			
+
+
 		}
+
+		public static void PrintTheNextMoveOfPlayer()
+        {
+			
+			while (s_Game.PlayerTurn.hasAnyMoves())
+            {
+				//s_Game.PlayerTurn = s_Game.GetOpponent(s_Game.PlayerTurn);
+				//nextTurn(s_Game.PlayerTurn);
+				if (lastMoveStr != null)
+				{
+					Console.WriteLine(s_Game.PlayerTurn.Name + "Move's was : " + lastMoveStr);
+
+				}
+				Console.WriteLine(s_Game.PlayerTurn.Name + " Turn:");
+				
+				playerMoveView(s_Game.PlayerTurn);
+				
+			}
+        }
 
 		private static string getCellAsString(Piece i_GamePiece)
 		{
