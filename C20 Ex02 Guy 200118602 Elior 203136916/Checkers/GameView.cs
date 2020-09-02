@@ -136,6 +136,7 @@ namespace Checkers
 			do
 			{
 				checkIfReadGood = true;
+				theMoveIsEating = e_Eat.NotCanEat;
 				MoveStrFromUser = Console.ReadLine();
 
 				if (MoveStrFromUser.Contains("Q"))
@@ -161,6 +162,7 @@ namespace Checkers
 					{
 						checkIfReadGood = false;
 						Console.WriteLine("You need to eat please try again:");
+						//theMoveIsEating = e_Eat.NotCanEat;
 					}
 				}
 

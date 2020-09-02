@@ -8,9 +8,9 @@ namespace Checkers.Model
 	class Player
 	{
 		public int CountOfPiecesForPlayer { get; set; }
-		private String name;
+		private String m_Name;
+		private e_PlayerID m_ID;
 		public Board Board { get; set; }
-		public e_PlayerID ID { get; set; }
 		public double Score { get; set; }
 		public Player(e_PlayerID i_PlayerID)
 		{
@@ -33,15 +33,26 @@ namespace Checkers.Model
 		{
 			get
 			{
-				return name;
+				return m_Name;
 			}
 
 			set
 			{
-				if (name == null)
+				if (m_Name == null)
 				{
-					name = value;
+					m_Name = value;
 				}
+			}
+		}
+		public e_PlayerID ID 
+		{
+			get
+			{
+				return m_ID;
+			}
+			set
+			{
+				m_ID = value;
 			}
 		}
 
@@ -58,7 +69,7 @@ namespace Checkers.Model
 		}
 		public void CheckInPieceIfCanTOEat(int i_X, int i_Y, ref List<int> io_CurrentPlace, ref List<int> io_NextPlace)
 		{
-			int moveSoldierUpOrDown = ID == e_PlayerID.FIRST ? 1 : -1;
+			int moveSoldierUpOrDown = ID == e_PlayerID.FIRST ? -1 : 1;
 			if (Board.getCellContent(i_X, i_Y).Rank == e_Rank.SOLDIER)
 			{
 				if (i_X < Board.BoardSize - 1 && i_Y< Board.BoardSize - 1 && i_Y > 1 
@@ -212,8 +223,8 @@ namespace Checkers.Model
 			{
 				for (int i = 0; i < currentPlace.Count && checkIfTheMovInEating == e_Eat.CanToEatButNot; i += 2)
 				{
-					if (currentPlace[i] == i_MoveStrFromUser[0] && currentPlace[i + 1] == i_MoveStrFromUser[1] &&
-						nextPlace[i] == i_MoveStrFromUser[3] && nextPlace[i + 1] == i_MoveStrFromUser[4])
+					if (currentPlace[i] == (int)i_MoveStrFromUser[0] - 'A' && currentPlace[i + 1] == (int)i_MoveStrFromUser[1] - 'a' &&
+						nextPlace[i] == (int)i_MoveStrFromUser[3] - 'A' && nextPlace[i + 1] == (int)i_MoveStrFromUser[4] - 'a')
 					{
 						checkIfTheMovInEating = e_Eat.EAT;
 					}
