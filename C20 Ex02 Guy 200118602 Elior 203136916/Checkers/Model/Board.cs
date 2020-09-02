@@ -115,12 +115,12 @@ namespace Checkers
               //  }
            // }
 
-            else if (oldX - 1 > 0  && oldY + 1 < BoardSize - 1 && getCellContent(oldX - 1, oldY + 1) != null)
-            {
-                if (getCellContent(oldX - 1, oldY + 1).Player.ID != player.ID)
-                {
-                    BoardGame[oldX - 1, oldY + 1] = null;
-                }
+           // else if (oldX - 1 > 0  && oldY + 1 < BoardSize - 1 && getCellContent(oldX - 1, oldY + 1) != null)
+           // {
+             //   if (getCellContent(oldX - 1, oldY + 1).Player.ID != player.ID)
+              //  {
+              //      BoardGame[oldX - 1, oldY + 1] = null;
+              //  }
             }
 
             //update if it had eaten for player 2
