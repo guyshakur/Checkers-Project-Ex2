@@ -86,33 +86,63 @@ namespace Checkers.Model
 
         public bool isValidMove(Board i_Board, int i_OldX, int i_OldY, int i_NewX, int i_NewY)
         {
+            bool checkIfTheMovIsGood = true;
+            Board = i_Board;
 
-            this.Board = i_Board;
-            if (Board.getCellContent(i_OldX, i_OldY) == null || Board.getCellContent(i_OldX, i_OldY).Player.ID != this.ID)
+            if (Board.getCellContent(i_OldX, i_OldY) == null || Board.getCellContent(i_OldX, i_OldY).Player.ID != ID)
             {
-                return false;
+                checkIfTheMovIsGood = false;
             }
-            if (Board.getCellContent(i_NewX, i_NewY) != null)
+            else if (Board.getCellContent(i_NewX, i_NewY) != null)
             {
 
-                return false;
+                checkIfTheMovIsGood = false;
             }
 
-            if (Board.getCellContent(i_OldX, i_OldY).Rank == e_Rank.SOLDIER)
+            else if (!checkTheMovGenericIsCorrect(Board.getCellContent(i_OldX, i_OldY).Rank, i_OldX, i_OldY, i_NewX, i_NewY))
+			{
+                checkIfTheMovIsGood = false;
+            }
+                
+            
+            return checkIfTheMovIsGood;
+        }
+        private bool checkTheMovGenericIsCorrect(e_Rank i_TypeSoldier, int i_OldX, int i_OldY, int i_NewX, int i_NewY)
+        {
+            bool answer = false;
+            int moveSoldierUpOrDown = ID == e_PlayerID.FIRST ? 1 : -1; //('1' -> First, '-1' -> Second 
+            bool isKing = i_TypeSoldier == e_Rank.KING;
+
+            if (i_OldY == i_NewY + moveSoldierUpOrDown && (i_OldX == i_NewX + 1 || i_OldX == i_NewX - 1))
+            ///check if this is 1 step and the location is consecutive 
             {
-                if ((ID == e_PlayerID.FIRST && i_NewY != i_OldY - 1 || ID == e_PlayerID.SECOND && i_NewY != i_OldY + 1) && (i_NewX != i_OldX + 1 || i_NewX != i_OldX - 1))
+                answer = true;
+            }
+            else if (i_OldY == i_NewY + 2 * moveSoldierUpOrDown && (i_OldX == i_NewX + 2 || i_OldX == i_NewX - 2) && // the ToX and ToY is distance with 2 from FromX and FromY.
+                Board.getCellContent((i_OldX+i_NewX)/2, (i_OldY+i_NewY)/2) != null && Board.getCellContent((i_OldX + i_NewX) / 2, (i_OldY + i_NewY) / 2).Player.ID != ID) // check if in cell have enemy soldier
+            ///check if i can to jump on enemy soldier.
+            {
+                answer = true;
+            }
+            else if (isKing)
+            {
+                if (i_OldY == i_NewY - moveSoldierUpOrDown
+                      && (i_OldX == i_NewX + 1 || i_OldX == i_NewX - 1))
+                ///check if this is 1 step and the location is consecutive 
                 {
-
-                    return false;
+                    answer = true;
+                }
+                else if (i_OldY == i_NewY - 2 * moveSoldierUpOrDown && (i_OldX == i_NewX + 2 || i_OldX == i_NewX - 2) && // the ToX and ToY is distance with 2 from FromX and FromY.
+                    Board.getCellContent((i_OldX + i_NewX) / 2, (i_OldY + i_NewY) / 2) != null && Board.getCellContent((i_OldX + i_NewX) / 2, (i_OldY + i_NewY) / 2).Player.ID != ID) // check if in cell have enemy soldier
+                ///check if i can to jump on enemy soldier.
+                {
+                    answer = true;
                 }
             }
-            else if ((i_NewY != i_OldY - 1 || i_NewY != i_OldY + 1) && (i_NewX != i_OldX + 1 || i_NewX != i_OldX - 1))
-            {
 
-                return false;
-            }
 
-            return true;
+            return answer;
         }
+
     }
 }
