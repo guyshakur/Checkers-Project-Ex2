@@ -99,6 +99,7 @@ namespace Checkers
         {
             BoardGame[oldX, oldY] = null;
             BoardGame[newX, newY] = new Piece(player);
+            
         }
 
 
