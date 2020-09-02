@@ -110,7 +110,13 @@ namespace Checkers
         {
             BoardGame[newX, newY] = getCellContent(oldX, oldY);
             BoardGame[oldX, oldY] = null;
-            if(Math.Abs(newX- oldX) == 2 && Math.Abs(newY - oldY) == 2)
+
+            if ((player.ID == e_PlayerID.FIRST && newY == 0) || (player.ID == e_PlayerID.SECOND && newY == BoardSize - 1))
+            {
+                BoardGame[newX, newY].Rank = e_Rank.KING;
+            }
+
+            if (Math.Abs(newX- oldX) == 2 && Math.Abs(newY - oldY) == 2)
 			{
                 BoardGame[(oldX + newX) /2 , (oldY + newY) / 2] = null;
             }
