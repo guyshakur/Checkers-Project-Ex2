@@ -1,42 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Checkers.Model
 {
-
+	public enum e_Eat { CanToEatButNot, EAT, NotCanEat }
 	public enum e_PlayerID { FIRST, SECOND }
 	class Player
 	{
-
-
 		public int CountOfPiecesForPlayer { get; set; }
-
 		private String name;
 		public Board Board { get; set; }
 		public e_PlayerID ID { get; set; }
-
 		public double Score { get; set; }
-
 		public Player(e_PlayerID i_PlayerID)
 		{
 			this.ID = i_PlayerID;
 			//this.Board = board;
 			//CountOfPiecesForPlayer = ((board.BoardSize - 2) / 2) * (board.BoardSize / 2);
-
-
 		}
 
 		public void movePiece(Board board, int oldX, int oldY, int newX, int newY)
 		{
-
-			this.Board = board;
-
+			Board = board;
 			Board.updateBoardGame(this, oldX, oldY, newX, newY);
-
 		}
 		public void Quit()
 		{
@@ -70,13 +56,13 @@ namespace Checkers.Model
 				return e_PlayerID.SECOND;
 			}
 		}
-		private void checkInPieceIfCanTOEat(int i_X, int i_Y, ref List<int> io_CurrentPlace, ref List<int> io_NextPlace)
+		public void CheckInPieceIfCanTOEat(int i_X, int i_Y, ref List<int> io_CurrentPlace, ref List<int> io_NextPlace)
 		{
 			int moveSoldierUpOrDown = ID == e_PlayerID.FIRST ? 1 : -1;
-
 			if (Board.getCellContent(i_X, i_Y).Rank == e_Rank.SOLDIER)
 			{
-				if (Board.getCellContent(i_X + 1, i_Y + moveSoldierUpOrDown) != null
+				if (i_X < Board.BoardSize - 1 && i_Y< Board.BoardSize - 1 && i_Y > 1 
+					&& Board.getCellContent(i_X + 1, i_Y + moveSoldierUpOrDown) != null
 					&& Board.getCellContent(i_X + 1, i_Y + moveSoldierUpOrDown).Player.ID != ID)
 				{
 					io_CurrentPlace.Add(i_X);
@@ -84,7 +70,8 @@ namespace Checkers.Model
 					io_NextPlace.Add(i_X + 2);
 					io_NextPlace.Add(i_Y + 2 * moveSoldierUpOrDown);
 				}
-				else if (Board.getCellContent(i_X - 1, i_Y + moveSoldierUpOrDown) != null
+				else if ( i_X > 1 &&  i_Y < Board.BoardSize - 1 && i_Y > 1 
+					&& Board.getCellContent(i_X - 1, i_Y + moveSoldierUpOrDown) != null
 					&& Board.getCellContent(i_X - 1, i_Y + moveSoldierUpOrDown).Player.ID != ID)
 				{
 					io_CurrentPlace.Add(i_X);
@@ -95,7 +82,8 @@ namespace Checkers.Model
 			}
 			else if (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING)
 			{
-				if (Board.getCellContent(i_X + 1, i_Y + 1) != null
+				if (i_X < Board.BoardSize - 1 && i_Y < Board.BoardSize - 1 && i_Y > 1 
+					&& Board.getCellContent(i_X + 1, i_Y + 1) != null
 					&& Board.getCellContent(i_X + 1, i_Y + 1).Player.ID != ID)
 				{
 					io_CurrentPlace.Add(i_X);
@@ -103,7 +91,8 @@ namespace Checkers.Model
 					io_NextPlace.Add(i_X + 2);
 					io_NextPlace.Add(i_Y + 2);
 				}
-				else if (Board.getCellContent(i_X - 1, i_Y + 1) != null
+				else if (i_X > 1 && i_Y < Board.BoardSize - 1 && i_Y > 1 
+					&& Board.getCellContent(i_X - 1, i_Y + 1) != null
 					&& Board.getCellContent(i_X - 1, i_Y + 1).Player.ID != ID)
 				{
 					io_CurrentPlace.Add(i_X);
@@ -111,26 +100,27 @@ namespace Checkers.Model
 					io_NextPlace.Add(i_X - 2);
 					io_NextPlace.Add(i_Y + 2);
 				}
-				else if (Board.getCellContent(i_X + 1, i_Y - 1) != null
+				else if (i_X < Board.BoardSize - 1 && i_Y < Board.BoardSize - 1 && i_Y > 1 
+					&& Board.getCellContent(i_X + 1, i_Y - 1) != null
 					&& Board.getCellContent(i_X + 1, i_Y - 1).Player.ID != ID)
-				{
+					{
 					io_CurrentPlace.Add(i_X);
 					io_CurrentPlace.Add(i_Y);
 					io_NextPlace.Add(i_X + 2);
 					io_NextPlace.Add(i_Y - 1);
 				}
-				else if (Board.getCellContent(i_X - 1, i_Y - 1) != null
+				else if (i_X > 1 && i_Y < Board.BoardSize - 1 && i_Y > 1 
+					&& Board.getCellContent(i_X - 1, i_Y - 1) != null
 					&& Board.getCellContent(i_X - 1, i_Y - 1).Player.ID != ID)
-				{
+					{
 					io_CurrentPlace.Add(i_X);
 					io_CurrentPlace.Add(i_Y);
 					io_NextPlace.Add(i_X - 2);
 					io_NextPlace.Add(i_Y - 2);
 				}
 			}
-
 		}
-		private void runOnAllBoardGame(out List<int> o_CurrentPlace, out List<int> o_NextPlace)
+		public bool RunOnAllBoardGame(out List<int> o_CurrentPlace, out List<int> o_NextPlace)
 		{
 			o_CurrentPlace = new List<int>(0);
 			o_NextPlace = new List<int>(0);
@@ -144,13 +134,13 @@ namespace Checkers.Model
 					{
 						if (Board.getCellContent(j, i).Player.ID == ID)
 						{
-							checkInPieceIfCanTOEat(j, i, ref o_CurrentPlace, ref o_NextPlace);
+							CheckInPieceIfCanTOEat(j, i, ref o_CurrentPlace, ref o_NextPlace);
 						}
 					}
 				}
 			}
+			return !(o_CurrentPlace.Count == 0);
 		}
-
 		public bool hasAnyMoves()
 		{
 			return true;
@@ -214,6 +204,39 @@ namespace Checkers.Model
 
 
 			return answer;
+		}
+		public e_Eat isCanToEatAndTheMovIsCorrect(string i_MoveStrFromUser)
+		{
+			e_Eat checkIfTheMovInEating = e_Eat.CanToEatButNot;
+			if (RunOnAllBoardGame(out List<int> currentPlace, out List<int> nextPlace))
+			{
+				for (int i = 0; i < currentPlace.Count && checkIfTheMovInEating == e_Eat.CanToEatButNot; i += 2)
+				{
+					if (currentPlace[i] == i_MoveStrFromUser[0] && currentPlace[i + 1] == i_MoveStrFromUser[1] &&
+						nextPlace[i] == i_MoveStrFromUser[3] && nextPlace[i + 1] == i_MoveStrFromUser[4])
+					{
+						checkIfTheMovInEating = e_Eat.EAT;
+					}
+				}
+			}
+			else
+			{
+				checkIfTheMovInEating = e_Eat.NotCanEat;
+			}
+			return checkIfTheMovInEating;
+		}
+
+		public bool checkIfCanMoreEatAfterEat(string i_StrFromUser)
+		{
+			bool ret = true;
+			List<int> currentPlace = new List<int>(0);
+			List<int> nextPlace = new List<int>(0);
+			CheckInPieceIfCanTOEat((int)i_StrFromUser[3] - 'A', (int)i_StrFromUser[4] - 'a', ref currentPlace, ref nextPlace);
+			if (currentPlace.Count == 0)
+			{
+				ret = false;
+			}
+			return ret;
 		}
 
 	}
