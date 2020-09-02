@@ -98,15 +98,21 @@ namespace Checkers
         public void updateBoardGame(Player player, int oldX, int oldY, int newX, int newY)
         {
             BoardGame[oldX, oldY] = null;
-            BoardGame[newX, newY] = new Piece(player);
+            Piece p = new Piece(player);
 
+            if(BoardGame[oldX,oldY])
+            
+            //if the player is on the "kingdom" row he should be a king now.
+            if((player.ID==e_PlayerID.FIRST && oldY==0)|| (player.ID == e_PlayerID.SECOND && oldY == BoardSize - 1))
+            {
+                p.Rank = e_Rank.KING;
+            }
+          
+            BoardGame[newX, newY] = p;
         }
 
 
-        public bool ChecksIfLegalMove()
-        {
-            return false;
-        }
+        
 
 
 
