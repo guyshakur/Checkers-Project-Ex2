@@ -12,7 +12,7 @@ namespace Checkers.Model
     class Player
     {
 
-        
+
         public int CountOfPiecesForPlayer { get; set; }
 
         private String name;
@@ -106,7 +106,7 @@ namespace Checkers.Model
                     return false;
                 }
             }
-            else if((i_NewY != i_OldY - 1 || i_NewY!=i_OldY + 1) && (i_NewX != i_OldX + 1 || i_NewX != i_OldX - 1))
+            else if ((i_NewY != i_OldY - 1 || i_NewY != i_OldY + 1) && (i_NewX != i_OldX + 1 || i_NewX != i_OldX - 1))
             {
 
                 return false;

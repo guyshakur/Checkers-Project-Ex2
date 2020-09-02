@@ -7,7 +7,7 @@ using Checkers.Model;
 
 namespace Checkers
 {
- 
+
     enum e_Rank { SOLDIER, KING }
 
     class Piece

@@ -15,7 +15,7 @@ namespace Checkers
 		private static Player s_Player1;
 		private static Player s_Player2;
 		private static Game s_Game;
-		private static string lastMoveStr=null;
+		private static string lastMoveStr = null;
 		private static string signOfPlayerPiece = null;
 
 		public static Board Board
@@ -28,7 +28,7 @@ namespace Checkers
 			{
 				s_Board = value;
 			}
-			
+
 		}
 		public static int BoardSize
 		{
@@ -42,15 +42,15 @@ namespace Checkers
 			}
 
 		}
-		public static int NumOfPlayers 
-		{ 
-			get 
-			{ 
-				return s_NumOfPlayers; 
+		public static int NumOfPlayers
+		{
+			get
+			{
+				return s_NumOfPlayers;
 			}
 			set
 			{
-				if(value == 1 || value == 2)
+				if (value == 1 || value == 2)
 				{
 					s_NumOfPlayers = value;
 				}
@@ -89,46 +89,46 @@ namespace Checkers
 
 		public static void Main()
 		{
-			checkersGame(); 
+			checkersGame();
 		}
 		private static void checkersGame()
 		{
-			
+
 			Player1 = new Player(e_PlayerID.FIRST);
 			Player2 = new Player(e_PlayerID.SECOND);
 
 			GameView.InitiaizeGame();
 
-			s_Game = new Game(Player1,Player2);
+			s_Game = new Game(Player1, Player2);
 			BoardSize = Board.InitialFilledRowsForPlayer;
 			Board = new Board(BoardSize, Player1, Player2);
-			
-			while(s_Game.PlayerTurn.hasAnyMoves())
-            {
+
+			while (s_Game.PlayerTurn.hasAnyMoves())
+			{
 				PrintBoard();
 				playerMoveView(s_Game.PlayerTurn);
 			}
 
-			
+
 
 		}
 		private static void playerMoveView(Player i_ThePlayerIsTurn)
 		{
-			if(i_ThePlayerIsTurn.ID== e_PlayerID.FIRST)
-            {
+			if (i_ThePlayerIsTurn.ID == e_PlayerID.FIRST)
+			{
 				signOfPlayerPiece = "X";
-            }
-            else
-            {
+			}
+			else
+			{
 				signOfPlayerPiece = "O";
 
 			}
 			if (lastMoveStr != null)
 			{
-				Console.WriteLine(s_Game.GetOpponent(s_Game.PlayerTurn).Name + " Move's was " +"("+ signOfPlayerPiece+"): "+ lastMoveStr);
+				Console.WriteLine(s_Game.GetOpponent(s_Game.PlayerTurn).Name + " Move's was " + "(" + signOfPlayerPiece + "): " + lastMoveStr);
 			}
 
-			Console.WriteLine(i_ThePlayerIsTurn.Name + "'s Turn: "+"("+signOfPlayerPiece+")");
+			Console.WriteLine(i_ThePlayerIsTurn.Name + "'s Turn: " + "(" + signOfPlayerPiece + ")");
 			String MoveStrFromUser;
 			bool checkIfReadGood;
 			do
@@ -136,37 +136,37 @@ namespace Checkers
 				checkIfReadGood = true;
 				MoveStrFromUser = Console.ReadLine();
 
-				if(MoveStrFromUser.Contains("Q"))
+				if (MoveStrFromUser.Contains("Q"))
 				{
-					i_ThePlayerIsTurn.Quit();   
+					i_ThePlayerIsTurn.Quit();
 				}
-				if(MoveStrFromUser.Length!=5 || 
-					MoveStrFromUser[0] < 'A' || MoveStrFromUser[0] > (char)(BoardSize + (int)'A' -1) ||
-					MoveStrFromUser[1] < 'a' || MoveStrFromUser[1] > (char)(BoardSize + (int)'a' -1) ||
+				if (MoveStrFromUser.Length != 5 ||
+					MoveStrFromUser[0] < 'A' || MoveStrFromUser[0] > (char)(BoardSize + (int)'A' - 1) ||
+					MoveStrFromUser[1] < 'a' || MoveStrFromUser[1] > (char)(BoardSize + (int)'a' - 1) ||
 					MoveStrFromUser[2] != '>' ||
-					MoveStrFromUser[3] < 'A' || MoveStrFromUser[3] > (char)(BoardSize + (int)'A' -1)||
-					MoveStrFromUser[4] < 'a' || MoveStrFromUser[4] > (char)(BoardSize + (int)'a' -1)
-					|| (!i_ThePlayerIsTurn.isValidMove(Board, (int)MoveStrFromUser[0]-(int)'A', (int)MoveStrFromUser[1] - (int)'a', (int)MoveStrFromUser[3] - 'A', (int)MoveStrFromUser[4] - 'a')))
+					MoveStrFromUser[3] < 'A' || MoveStrFromUser[3] > (char)(BoardSize + (int)'A' - 1) ||
+					MoveStrFromUser[4] < 'a' || MoveStrFromUser[4] > (char)(BoardSize + (int)'a' - 1)
+					|| (!i_ThePlayerIsTurn.isValidMove(Board, (int)MoveStrFromUser[0] - (int)'A', (int)MoveStrFromUser[1] - (int)'a', (int)MoveStrFromUser[3] - 'A', (int)MoveStrFromUser[4] - 'a')))
 
 				{
-					
+
 					checkIfReadGood = false;
 					Console.WriteLine("The move is wrong please try again:");
 				}
-				
+
 			} while (!checkIfReadGood);
 			//i_ThePlayerIsTurn.
 			///we need to call func in model to check if the move is good and move the soldier in board.
 			///and in thr fun to call to PrintBoard after the soldier moved.
 			///
-			i_ThePlayerIsTurn.movePiece(Board, (int)MoveStrFromUser[0]-(int)'A',(int)MoveStrFromUser[1]-(int)'a',(int)MoveStrFromUser[3]-'A',(int)MoveStrFromUser[4]-'a') ;
+			i_ThePlayerIsTurn.movePiece(Board, (int)MoveStrFromUser[0] - (int)'A', (int)MoveStrFromUser[1] - (int)'a', (int)MoveStrFromUser[3] - 'A', (int)MoveStrFromUser[4] - 'a');
 			s_Game.PlayerTurn = s_Game.GetOpponent(i_ThePlayerIsTurn);
 			lastMoveStr = MoveStrFromUser;
 			PrintBoard();
 		}
 		private static void PrintBoard()
 		{
-			Screen.Clear();			
+			Screen.Clear();
 			string boardHeader = "   A   B   C   D   E   F   G   H   I   J";
 			StringBuilder paint = new StringBuilder("");
 			paint.AppendLine(" " + boardHeader.Substring(0, BoardSize * 4));
@@ -196,16 +196,16 @@ namespace Checkers
 			paint.AppendLine();
 			paint.AppendLine();
 			Console.WriteLine(paint);
-			
+
 
 
 		}
 
 		public static void PrintTheNextMoveOfPlayer()
-        {
-			
+		{
+
 			while (s_Game.PlayerTurn.hasAnyMoves())
-            {
+			{
 				//s_Game.PlayerTurn = s_Game.GetOpponent(s_Game.PlayerTurn);
 				//nextTurn(s_Game.PlayerTurn);
 				if (lastMoveStr != null)
@@ -214,27 +214,27 @@ namespace Checkers
 
 				}
 				Console.WriteLine(s_Game.PlayerTurn.Name + " Turn:");
-				
+
 				playerMoveView(s_Game.PlayerTurn);
-				
+
 			}
-        }
+		}
 
 		private static string getCellAsString(Piece i_GamePiece)
 		{
 			string stringReturn = " ";
 
-			if(i_GamePiece==null)
+			if (i_GamePiece == null)
 			{
-				stringReturn  = " ";
+				stringReturn = " ";
 			}
-			else if(i_GamePiece.Player.ID==e_PlayerID.FIRST)
+			else if (i_GamePiece.Player.ID == e_PlayerID.FIRST)
 			{
-				stringReturn  = i_GamePiece.Rank==e_Rank.SOLDIER ? "X" : "K";
+				stringReturn = i_GamePiece.Rank == e_Rank.SOLDIER ? "X" : "K";
 			}
 			else if (i_GamePiece.Player.ID == e_PlayerID.SECOND)
 			{
-				stringReturn  = i_GamePiece.Rank == e_Rank.SOLDIER ? "O" : "U";
+				stringReturn = i_GamePiece.Rank == e_Rank.SOLDIER ? "O" : "U";
 			}
 			return stringReturn;
 		}
