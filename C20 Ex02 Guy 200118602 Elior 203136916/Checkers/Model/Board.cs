@@ -11,7 +11,18 @@ namespace Checkers
 
     class Board
     {
-        public Piece[,] BoardGame { get; set; }
+        public Piece[,] BoardGame
+        {
+            get
+            {
+                return m_BoardGame;
+            }
+            set
+            {
+                m_BoardGame = value;
+            }
+        }
+        private Piece[,] m_BoardGame;
 
         public int BoardSize { get; set; }
 
@@ -38,7 +49,7 @@ namespace Checkers
         }
         public Board(int boardSize, Player player1, Player player2)
         {
-            this.BoardSize = boardSize;
+            BoardSize = boardSize;
             BoardGame = new Piece[boardSize, boardSize];
 
             initialFilledRowsForPlayer = (boardSize - 2) / 2;
@@ -99,8 +110,13 @@ namespace Checkers
         {
             BoardGame[newX, newY] = getCellContent(oldX, oldY);
             BoardGame[oldX, oldY] = null;
+            if(Math.Abs(newX- oldX) == 2 && Math.Abs(newY - oldY) == 2)
+			{
+                BoardGame[(oldX + newX) /2 , (oldY + newY) / 2] = null;
+            }
 
-          
+
+
         }
 
 

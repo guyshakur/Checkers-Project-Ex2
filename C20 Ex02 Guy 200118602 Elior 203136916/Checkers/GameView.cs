@@ -170,7 +170,7 @@ namespace Checkers
 			///and in thr fun to call to PrintBoard after the soldier moved.
 			///
 			i_ThePlayerIsTurn.movePiece(Board, (int)MoveStrFromUser[0] - (int)'A', (int)MoveStrFromUser[1] - (int)'a', (int)MoveStrFromUser[3] - 'A', (int)MoveStrFromUser[4] - 'a');
-			if (!(theMoveIsEating == e_Eat.EAT)&& (i_ThePlayerIsTurn.checkIfCanMoreEatAfterEat(MoveStrFromUser)))
+			if (!((theMoveIsEating == e_Eat.EAT)&& (i_ThePlayerIsTurn.checkIfCanMoreEatAfterEat(MoveStrFromUser))))
 			{
 				s_Game.PlayerTurn = s_Game.GetOpponent(i_ThePlayerIsTurn);
 			}
