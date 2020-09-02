@@ -1,5 +1,6 @@
 ﻿using Checkers.Model;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Checkers
 {
@@ -97,45 +98,105 @@ namespace Checkers
 		public bool ChecksIfLegalMove(Player i_PlayerMoved, int i_FromX, int i_FromY, int i_ToX, int i_ToY)
 		{
 			bool checkIfTheMovIsGood = true;
-			int move = i_PlayerMoved.ID == e_PlayerID.FIRST ? 1 : -1;
+			string msg = "";
 			if (BoardGame[i_FromY, i_FromX] == null)// check if in fromCell is not empty
 			{
 				checkIfTheMovIsGood = false;
-				Console.WriteLine("The soldier in a cell you want moved is empty. please try again");
+				msg = "The soldier in a cell you want moved is empty. please try again";
 
 			}
 			else if (BoardGame[i_FromY, i_FromX].Player.ID != i_PlayerMoved.ID)// check if in the cell, have a soldier of player 
 			{
 				checkIfTheMovIsGood = false;
-				Console.WriteLine("The soldier in a cell you want moved is not your soldier. please try again");
+				msg = "The soldier in a cell you want moved is not your soldier. please try again";
 			}
 			else if (BoardGame[i_ToY, i_ToX] != null) // check if in the toCell is Empty
 			{
 				checkIfTheMovIsGood = false;
-				Console.WriteLine("In cell you want to move the soldier is not Empty. please try again");
+				msg = "In cell you want to move the soldier is not Empty. please try again";
+			}
+			else if (!checkTheMovGenericIsCorrect(BoardGame[i_FromY, i_FromX].Rank, i_PlayerMoved, i_FromX, i_FromY, i_ToX, i_ToY))
+			{
+				checkIfTheMovIsGood = false;
+				msg = "the move is incoerrect. please try again";
 			}
 			//CHECK IF THE MOV IS CORRECT
-			else if (BoardGame[i_FromY, i_FromX].Rank == e_Rank.SOLDIER)//the soldier is SOLDIER (Just 1 side)
+			/*else if (BoardGame[i_FromY, i_FromX].Rank == e_Rank.SOLDIER)//the soldier is SOLDIER. 
 			{
-				if (!(i_FromY == i_ToY + move/*(1 -> First, -1 -> Second*/ && (i_FromX == i_ToX + 1 || i_FromX == i_ToX - 1)))//the next cell is not correct
+				///Regular step (not jump on enemy soldier).
+				if (!(i_FromY == i_ToY + moveSoldierUpOrDown //('1' -> First, '-1' -> Second 
+					&& (i_FromX == i_ToX + 1 || i_FromX == i_ToX - 1)))//the next cell is not correct
 				{
 					checkIfTheMovIsGood = false;
-					Console.WriteLine("The next cell is not correct for the soldier. please try again");
+					msg = "The next cell is not correct for the soldier. please try again";
+				}
+				///Jump step (step with jump on enemy soldier).
+				else if(!(i_FromY == i_ToY + 2 * moveSoldierUpOrDown && (i_FromX == i_ToX + 2 || i_FromX == i_ToX - 2) && // the ToX and ToY is distance with 2 from FromX and FromY.
+					BoardGame[i_FromY,i_FromX] != null && BoardGame[i_FromY, i_FromX].Player.ID != i_PlayerMoved.ID )) //(the cell is not empty and not my soldier in the cell)	// check if in the cell have the enemy soldier and i can to eat him.
+
+				{
+					checkIfTheMovIsGood = false;
+					msg = "You can not jump (the step is not correct(the disdance is not 2) or you jump on cell is empty or your soldier). please try again";
 				}
 			}
 			else if (BoardGame[i_FromY, i_FromX].Rank == e_Rank.KING)//the soldier is King (UP and DOWN)
 			{
+				///Regular step (not jump on enemy soldier).
 				if (!((i_FromY == i_ToY + 1 || i_FromY == i_ToY - 1) && (i_FromX == i_ToX + 1 || i_FromX == i_ToX - 1)))//the next cell is not correct
 				{
 					checkIfTheMovIsGood = false;
-					Console.WriteLine("The next cell is not correct for the King. please try again");
+					msg = "The next cell is not correct for the King. please try again";
+				}*/
+			///Jump step (step with jump on enemy soldier).
+			else
+			{ }
+
+
+			if (!checkIfTheMovIsGood)
+			{
+				Console.WriteLine(msg);//need move this line to another class (view)
+			}
+			return checkIfTheMovIsGood;
+		}
+
+		private bool checkTheMovGenericIsCorrect(e_Rank i_TypeSoldier, Player i_PlayerMoved, int i_FromX, int i_FromY, int i_ToX, int i_ToY)
+		{
+			bool answer = false;
+			int moveSoldierUpOrDown = i_PlayerMoved.ID == e_PlayerID.FIRST ? 1 : -1;
+			bool isKing = i_TypeSoldier == e_Rank.KING ;
+
+			if (i_FromY == i_ToY + moveSoldierUpOrDown //('1' -> First, '-1' -> Second 
+					  && (i_FromX == i_ToX + 1 || i_FromX == i_ToX - 1))
+					  ///check if this is 1 step and the location is consecutive 
+			{
+				answer = true;
+			}
+			else if (i_FromY == i_ToY + 2 * moveSoldierUpOrDown && (i_FromX == i_ToX + 2 || i_FromX == i_ToX - 2) && // the ToX and ToY is distance with 2 from FromX and FromY.
+				BoardGame[i_FromY, i_FromX] != null && BoardGame[i_FromY, i_FromX].Player.ID != i_PlayerMoved.ID) // check if in cell have enemy soldier
+				///check if i can to jump on enemy soldier.
+			{
+				answer = true;
+			}
+			else if(isKing)
+			{
+				if (i_FromY == i_ToY - moveSoldierUpOrDown 
+					  && (i_FromX == i_ToX + 1 || i_FromX == i_ToX - 1))
+				///check if this is 1 step and the location is consecutive 
+				{
+					answer = true;
+				}
+				else if (i_FromY == i_ToY - 2 * moveSoldierUpOrDown && (i_FromX == i_ToX + 2 || i_FromX == i_ToX - 2) && // the ToX and ToY is distance with 2 from FromX and FromY.
+					BoardGame[i_FromY, i_FromX] != null && BoardGame[i_FromY, i_FromX].Player.ID != i_PlayerMoved.ID) // check if in cell have enemy soldier
+				///check if i can to jump on enemy soldier.
+				{
+					answer = true;
 				}
 			}
 
-			//else if()
-
-			return checkIfTheMovIsGood;
+			
+			return answer;
 		}
+
 	}
 }
 
