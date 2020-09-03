@@ -139,12 +139,12 @@ namespace Checkers
         {
             if(ID == e_PlayerID.FIRST)
             {
-                Player2.CountOfPiecesForPlayer--;
+                Player1.CountOfPiecesForPlayer--;
                 
             }
             else
             {
-                Player1.CountOfPiecesForPlayer--;
+                Player2.CountOfPiecesForPlayer--;
             }
         }
         

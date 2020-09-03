@@ -1,4 +1,6 @@
 ﻿
+using System.Runtime.InteropServices;
+
 namespace Checkers.Model
 {
     class Game
@@ -33,39 +35,30 @@ namespace Checkers.Model
             player2.CountOfPiecesForPlayer = ((board.BoardSize - 2) / 2) * (board.BoardSize / 2);
         }
 
-        public void GameLoop(Player i_Player1,Player i_player2)
+        public bool GameLoop(Player i_Player1,Player i_Player2)
         {
             bool gameEnded = false;
             while (!gameEnded)
             {
-                for(int y = 0; y < Board.BoardSize; y++ )
+                
+                if(i_Player2.CountOfPiecesForPlayer == 0)
                 {
-                    for(int x = 0; x<Board.BoardSize; x++)
-                    {
-                        if(Board.getCellContent(x,y)!= null)
-                        {
-                            if(Board.getCellContent(x, y).Player.ID==e_PlayerID.FIRST)
-                            {
-
-                            }
-                        }
-                    }
+                    i_Player1.HasWonAndUpdateTheScore(i_Player2);
+                    gameEnded = true;
+                    
+                }
+                else if(i_Player1.CountOfPiecesForPlayer == 0)
+                {
+                    i_Player2.HasWonAndUpdateTheScore(i_Player1);
+                    gameEnded = true;
                 }
 
             }
+
+            return gameEnded;
         }
 
-        public void updateCountOfPiecesOfTheOther(e_PlayerID ID)
-        {
-            if(Player1.ID==ID)
-            {
-                Player1.CountOfPiecesForPlayer--;
-            }
-            else
-            {
-                Player2.CountOfPiecesForPlayer--;
-            }
-        }
+     
 
     }
 }

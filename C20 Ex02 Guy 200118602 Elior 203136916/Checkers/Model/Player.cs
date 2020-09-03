@@ -15,7 +15,7 @@ namespace Checkers.Model
 		private String m_Name;
 		private e_PlayerID m_ID;
 		public Board Board { get; set; }
-		public double Score { get; set; }
+		public int Score { get; set; }
 		public Player(e_PlayerID i_PlayerID)
 		{
 			this.ID = i_PlayerID;
@@ -68,12 +68,42 @@ namespace Checkers.Model
 			}
 			else
 			{
-				return e_PlayerID.SECOND;
+				return e_PlayerID.FIRST;
 			}
 		}
 
-		
-		public void CheckInPieceIfCanTOEat(int i_X, int i_Y, ref List<int> io_CurrentPlace, ref List<int> io_NextPlace)
+        public void HasWonAndUpdateTheScore(Player i_OppPlayer)
+        {
+			Score=updatePlayerPoints() - i_OppPlayer.updatePlayerPoints();
+			return ID;
+        }
+
+		//counting the piecsed for player and if it's king it's equals 4 points
+        private int updatePlayerPoints()
+        {
+			int points = 0;
+            for (int y=0; y < Board.BoardSize; y++)
+            {
+				for (int x=0; x < Board.BoardSize; x++)
+                {
+					if(Board.getCellContent(x,y)!=null)
+                    {
+						if(Board.getCellContent(x,y).Player.ID == ID && Board.getCellContent(x,y).Rank==e_Rank.SOLDIER)
+                        {
+							points++;
+                        }
+						else if(Board.getCellContent(x, y).Player.ID == ID && Board.getCellContent(x, y).Rank == e_Rank.KING)
+                        {
+							points+=4;
+
+						}
+                    }
+                }
+            }
+			return points;
+        }
+
+        public void CheckInPieceIfCanTOEat(int i_X, int i_Y, ref List<int> io_CurrentPlace, ref List<int> io_NextPlace)
 		{
 			int moveSoldierUpOrDown = ID == e_PlayerID.FIRST ? -1 : 1;
 			if (Board.getCellContent(i_X, i_Y).Rank == e_Rank.SOLDIER)

@@ -131,7 +131,7 @@ namespace Checkers
 				Console.WriteLine(s_Game.GetOpponent(s_Game.PlayerTurn).Name + " Move's was " + "(" +  s_Game.GetOpponent(s_Game.PlayerTurn).SignOfPlayer + "): " + lastMoveStr);
 			}
 
-			Console.WriteLine(i_ThePlayerIsTurn.Name + "'s Turn " + "(" + i_ThePlayerIsTurn.CountOfPiecesForPlayer + "):");
+			Console.WriteLine(i_ThePlayerIsTurn.Name + "'s Turn " + "(" + s_Game.PlayerTurn.SignOfPlayer + "):");
 			String MoveStrFromUser;
 			bool checkIfReadGood;
 			e_Eat theMoveIsEating = e_Eat.NotCanEat;
@@ -249,10 +249,12 @@ namespace Checkers
 			else if (i_GamePiece.Player.ID == e_PlayerID.FIRST)
 			{
 				stringReturn = i_GamePiece.Rank == e_Rank.SOLDIER ? "X" : "K";
+				
 			}
 			else if (i_GamePiece.Player.ID == e_PlayerID.SECOND)
 			{
 				stringReturn = i_GamePiece.Rank == e_Rank.SOLDIER ? "O" : "U";
+				
 			}
 			return stringReturn;
 		}
