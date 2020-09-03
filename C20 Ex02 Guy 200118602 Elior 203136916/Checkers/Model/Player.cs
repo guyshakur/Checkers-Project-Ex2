@@ -72,6 +72,7 @@ namespace Checkers.Model
 			}
 		}
 
+		
         public  void HasWonAndUpdateTheScore(Player i_OppPlayer)
         {
 			Score=updatePlayerPoints() - i_OppPlayer.updatePlayerPoints();
@@ -104,7 +105,59 @@ namespace Checkers.Model
 
         public void CheckInPieceIfCanTOEat(int i_X, int i_Y, ref List<int> io_CurrentPlace, ref List<int> io_NextPlace)
 		{
-			int moveSoldierUpOrDown = ID == e_PlayerID.FIRST ? -1 : 1;
+			if (i_X > 1 && i_Y > 1 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.FIRST))//i can eat up and left
+			{//--
+				if (Board.getCellContent(i_X - 1, i_Y - 1) != null
+					&& Board.getCellContent(i_X - 1, i_Y - 1).Player.ID != ID
+					&& Board.getCellContent(i_X - 2, i_Y - 2) == null)
+
+				{
+					io_CurrentPlace.Add(i_X);
+					io_CurrentPlace.Add(i_Y);
+					io_NextPlace.Add(i_X - 2);
+					io_NextPlace.Add(i_Y - 2 );
+				}
+			}
+			if (i_X > 1 && i_Y < Board.BoardSize -1 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.SECOND))//i can eat down and left
+			{//-+
+				if (Board.getCellContent(i_X - 1, i_Y + 1) != null
+					&& Board.getCellContent(i_X - 1, i_Y + 1).Player.ID != ID
+					&& Board.getCellContent(i_X - 2, i_Y + 2) == null)
+
+				{
+					io_CurrentPlace.Add(i_X);
+					io_CurrentPlace.Add(i_Y);
+					io_NextPlace.Add(i_X - 2);
+					io_NextPlace.Add(i_Y + 2);
+				}
+			}
+			if (i_X < Board.BoardSize - 1 && i_Y > 1 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.FIRST))//i can eat up and right
+			{//+-
+				if (Board.getCellContent(i_X + 1, i_Y - 1) != null
+					&& Board.getCellContent(i_X + 1, i_Y - 1).Player.ID != ID
+					&& Board.getCellContent(i_X + 2, i_Y - 2) == null)
+
+				{
+					io_CurrentPlace.Add(i_X);
+					io_CurrentPlace.Add(i_Y);
+					io_NextPlace.Add(i_X + 2);
+					io_NextPlace.Add(i_Y - 2);
+				}
+			}
+			if (i_X < Board.BoardSize - 1 && i_Y < Board.BoardSize - 1 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.FIRST))//i can eat down and left
+			{//++
+				if (Board.getCellContent(i_X + 1, i_Y + 1) != null
+					&& Board.getCellContent(i_X + 1, i_Y + 1).Player.ID != ID
+					&& Board.getCellContent(i_X + 2, i_Y + 2) == null)
+
+				{
+					io_CurrentPlace.Add(i_X);
+					io_CurrentPlace.Add(i_Y);
+					io_NextPlace.Add(i_X + 2);
+					io_NextPlace.Add(i_Y + 2);
+				}
+			}
+			/*int moveSoldierUpOrDown = ID == e_PlayerID.FIRST ? -1 : 1;
 			if (Board.getCellContent(i_X, i_Y).Rank == e_Rank.SOLDIER)
 			{
 				if (i_X < Board.BoardSize - 1 && i_Y< Board.BoardSize - 1 && i_Y > 1 
@@ -171,7 +224,7 @@ namespace Checkers.Model
 					io_NextPlace.Add(i_X - 2);
 					io_NextPlace.Add(i_Y - 2);
 				}
-			}
+			}*/
 		}
 		public bool RunOnAllBoardGame(out List<int> o_CurrentPlace, out List<int> o_NextPlace)
 		{

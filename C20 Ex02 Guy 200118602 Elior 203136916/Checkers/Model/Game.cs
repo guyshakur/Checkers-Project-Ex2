@@ -40,7 +40,7 @@ namespace Checkers.Model
             if (!gameEnded)
             {
                 
-                if(Player2.CountOfPiecesForPlayer == ((Board.BoardSize - 2) / 2) * (Board.BoardSize / 2) -1 )
+                if(Player2.CountOfPiecesForPlayer == 0)
                 {
                     
                     Player1.HasWonAndUpdateTheScore(Player2);
@@ -48,7 +48,7 @@ namespace Checkers.Model
                     gameEnded = true;
                     
                 }
-                else if(Player1.CountOfPiecesForPlayer == ((Board.BoardSize - 2) / 2) * (Board.BoardSize / 2) - 1)
+                else if(Player1.CountOfPiecesForPlayer == 0)
                 {
                     Player2.HasWonAndUpdateTheScore(Player1);
                     WinnerID = Player2.ID;

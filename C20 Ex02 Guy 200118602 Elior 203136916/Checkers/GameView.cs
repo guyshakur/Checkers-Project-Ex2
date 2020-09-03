@@ -106,7 +106,7 @@ namespace Checkers
 			Board = new Board(BoardSize, Player1, Player2);
 			s_Game = new Game(Player1,  Player2, Board);
 			
-			//running the loop of game
+			//running the loop of game bla bla bla bla bla bla bla
 			while (!s_Game.GameLoop())
 			{
 				PrintBoard();
