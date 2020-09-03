@@ -132,6 +132,7 @@ namespace Checkers
 
             }
 
+            player.Board = this;
 
         }
 

@@ -105,11 +105,23 @@ namespace Checkers
 			BoardSize = Board.InitialFilledRowsForPlayer;
 			Board = new Board(BoardSize, Player1, Player2);
 			s_Game = new Game(Player1,  Player2, Board);
-			while (s_Game.PlayerTurn.hasAnyMoves())
+			
+			//running the loop of game
+			while (!s_Game.GameLoop())
 			{
 				PrintBoard();
 				playerMoveView(s_Game.PlayerTurn);
 			}
+
+			if(s_Game.WinnerID==e_PlayerID.FIRST)
+            {
+				Console.Write("The winner is :  " + Player1.Name + "With score of: "+ Player1.Score);
+            }
+			else
+            {
+				Console.Write("The winner is :  " + Player2.Name + "With score of: " + Player2.Score);
+			}
+			//}
 
 
 
@@ -117,70 +129,76 @@ namespace Checkers
 
 		private static void playerMoveView(Player i_ThePlayerIsTurn)
 		{
-			if (i_ThePlayerIsTurn.ID == e_PlayerID.FIRST)
-			{
-				signOfPlayerPiece = "X";
-			}
-			else
-			{
-				signOfPlayerPiece = "O";
+			
 
-			}
-			if (lastMoveStr != null)
-			{
-				Console.WriteLine(s_Game.GetOpponent(s_Game.PlayerTurn).Name + " Move's was " + "(" +  s_Game.GetOpponent(s_Game.PlayerTurn).SignOfPlayer + "): " + lastMoveStr);
-			}
-
-			Console.WriteLine(i_ThePlayerIsTurn.Name + "'s Turn " + "(" + s_Game.PlayerTurn.SignOfPlayer + "):");
-			String MoveStrFromUser;
-			bool checkIfReadGood;
-			e_Eat theMoveIsEating = e_Eat.NotCanEat;
-			do
-			{
-				checkIfReadGood = true;
-				theMoveIsEating = e_Eat.NotCanEat;
-				MoveStrFromUser = Console.ReadLine();
-
-				if (MoveStrFromUser.Contains("Q"))
+				if (i_ThePlayerIsTurn.ID == e_PlayerID.FIRST)
 				{
-					i_ThePlayerIsTurn.Quit();
-				}
-				if (MoveStrFromUser.Length != 5 ||
-					MoveStrFromUser[0] < 'A' || MoveStrFromUser[0] > (char)(BoardSize + (int)'A' - 1) ||
-					MoveStrFromUser[1] < 'a' || MoveStrFromUser[1] > (char)(BoardSize + (int)'a' - 1) ||
-					MoveStrFromUser[2] != '>' ||
-					MoveStrFromUser[3] < 'A' || MoveStrFromUser[3] > (char)(BoardSize + (int)'A' - 1) ||
-					MoveStrFromUser[4] < 'a' || MoveStrFromUser[4] > (char)(BoardSize + (int)'a' - 1)
-					|| (!i_ThePlayerIsTurn.isValidMove(Board, (int)MoveStrFromUser[0] - (int)'A', (int)MoveStrFromUser[1] - (int)'a', (int)MoveStrFromUser[3] - 'A', (int)MoveStrFromUser[4] - 'a')))
-				{
-
-					checkIfReadGood = false;
-					Console.WriteLine("The move is wrong please try again:");
+					signOfPlayerPiece = "X";
 				}
 				else
 				{
-					theMoveIsEating = i_ThePlayerIsTurn.isCanToEatAndTheMovIsCorrect(MoveStrFromUser);
-					if (theMoveIsEating == e_Eat.CanToEatButNot)
-					{
-						checkIfReadGood = false;
-						Console.WriteLine("You need to eat please try again:");
-						//theMoveIsEating = e_Eat.NotCanEat;
-					}
+					signOfPlayerPiece = "O";
+
 				}
 
-			} while (!checkIfReadGood);
-			//i_ThePlayerIsTurn.
-			///we need to call func in model to check if the move is good and move the soldier in board.
-			///and in thr fun to call to PrintBoard after the soldier moved.
-			///
-			i_ThePlayerIsTurn.movePiece(Board, (int)MoveStrFromUser[0] - (int)'A', (int)MoveStrFromUser[1] - (int)'a', (int)MoveStrFromUser[3] - 'A', (int)MoveStrFromUser[4] - 'a');
-			if (!((theMoveIsEating == e_Eat.EAT)&& (i_ThePlayerIsTurn.checkIfCanMoreEatAfterEat(MoveStrFromUser))))
-			{
-				s_Game.PlayerTurn = s_Game.GetOpponent(i_ThePlayerIsTurn);
-			}
+		
+				if (lastMoveStr != null)
+				{
+					Console.WriteLine(s_Game.GetOpponent(s_Game.PlayerTurn).Name + " Move's was " + "(" + s_Game.GetOpponent(s_Game.PlayerTurn).SignOfPlayer + "): " + lastMoveStr);
+				}
+
+				Console.WriteLine(i_ThePlayerIsTurn.Name + "'s Turn " + "(" + s_Game.PlayerTurn.SignOfPlayer + "):");
+				String MoveStrFromUser;
+				bool checkIfReadGood;
+				e_Eat theMoveIsEating = e_Eat.NotCanEat;
+				do
+				{
+					checkIfReadGood = true;
+					theMoveIsEating = e_Eat.NotCanEat;
+					MoveStrFromUser = Console.ReadLine();
+
+					if (MoveStrFromUser.Contains("Q"))
+					{
+						i_ThePlayerIsTurn.Quit();
+					}
+					if (MoveStrFromUser.Length != 5 ||
+						MoveStrFromUser[0] < 'A' || MoveStrFromUser[0] > (char)(BoardSize + (int)'A' - 1) ||
+						MoveStrFromUser[1] < 'a' || MoveStrFromUser[1] > (char)(BoardSize + (int)'a' - 1) ||
+						MoveStrFromUser[2] != '>' ||
+						MoveStrFromUser[3] < 'A' || MoveStrFromUser[3] > (char)(BoardSize + (int)'A' - 1) ||
+						MoveStrFromUser[4] < 'a' || MoveStrFromUser[4] > (char)(BoardSize + (int)'a' - 1)
+						|| (!i_ThePlayerIsTurn.isValidMove(Board, (int)MoveStrFromUser[0] - (int)'A', (int)MoveStrFromUser[1] - (int)'a', (int)MoveStrFromUser[3] - 'A', (int)MoveStrFromUser[4] - 'a')))
+					{
+
+						checkIfReadGood = false;
+						Console.WriteLine("The move is wrong please try again:");
+					}
+					else
+					{
+						theMoveIsEating = i_ThePlayerIsTurn.isCanToEatAndTheMovIsCorrect(MoveStrFromUser);
+						if (theMoveIsEating == e_Eat.CanToEatButNot)
+						{
+							checkIfReadGood = false;
+							Console.WriteLine("You need to eat please try again:");
+							//theMoveIsEating = e_Eat.NotCanEat;
+						}
+					}
+
+				} while (!checkIfReadGood);
+				//i_ThePlayerIsTurn.
+				///we need to call func in model to check if the move is good and move the soldier in board.
+				///and in thr fun to call to PrintBoard after the soldier moved.
+				///
+				i_ThePlayerIsTurn.movePiece(Board, (int)MoveStrFromUser[0] - (int)'A', (int)MoveStrFromUser[1] - (int)'a', (int)MoveStrFromUser[3] - 'A', (int)MoveStrFromUser[4] - 'a');
+				if (!((theMoveIsEating == e_Eat.EAT) && (i_ThePlayerIsTurn.checkIfCanMoreEatAfterEat(MoveStrFromUser))))
+				{
+					s_Game.PlayerTurn = s_Game.GetOpponent(i_ThePlayerIsTurn);
+				}
+
+				lastMoveStr = MoveStrFromUser;
+				PrintBoard();
 			
-			lastMoveStr = MoveStrFromUser;
-			PrintBoard();
+            
 		}
 		private static void PrintBoard()
 		{

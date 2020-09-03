@@ -6,8 +6,7 @@ namespace Checkers.Model
     class Game
     {
 
-
-
+        public e_PlayerID WinnerID { get; set; }
         public Player Player1 { get; set; }
         public Player Player2 { get; set; }
         public Player PlayerTurn { get; set; }
@@ -35,21 +34,24 @@ namespace Checkers.Model
             player2.CountOfPiecesForPlayer = ((board.BoardSize - 2) / 2) * (board.BoardSize / 2);
         }
 
-        public bool GameLoop(Player i_Player1,Player i_Player2)
+        public  bool GameLoop()
         {
             bool gameEnded = false;
-            while (!gameEnded)
+            if (!gameEnded)
             {
                 
-                if(i_Player2.CountOfPiecesForPlayer == 0)
+                if(Player2.CountOfPiecesForPlayer == ((Board.BoardSize - 2) / 2) * (Board.BoardSize / 2) -1 )
                 {
-                    i_Player1.HasWonAndUpdateTheScore(i_Player2);
+                    
+                    Player1.HasWonAndUpdateTheScore(Player2);
+                    WinnerID = Player1.ID;
                     gameEnded = true;
                     
                 }
-                else if(i_Player1.CountOfPiecesForPlayer == 0)
+                else if(Player1.CountOfPiecesForPlayer == ((Board.BoardSize - 2) / 2) * (Board.BoardSize / 2) - 1)
                 {
-                    i_Player2.HasWonAndUpdateTheScore(i_Player1);
+                    Player2.HasWonAndUpdateTheScore(Player1);
+                    WinnerID = Player2.ID;
                     gameEnded = true;
                 }
 

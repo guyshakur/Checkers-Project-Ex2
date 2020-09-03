@@ -72,10 +72,9 @@ namespace Checkers.Model
 			}
 		}
 
-        public void HasWonAndUpdateTheScore(Player i_OppPlayer)
+        public  void HasWonAndUpdateTheScore(Player i_OppPlayer)
         {
 			Score=updatePlayerPoints() - i_OppPlayer.updatePlayerPoints();
-			return ID;
         }
 
 		//counting the piecsed for player and if it's king it's equals 4 points
