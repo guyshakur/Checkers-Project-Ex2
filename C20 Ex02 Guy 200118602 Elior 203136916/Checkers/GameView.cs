@@ -128,7 +128,7 @@ namespace Checkers
             }
             if (s_LastMoveStr != null)
             {
-                Console.WriteLine(s_Game.GetOpponent(s_Game.PlayerTurn).Name + " Move's was " + "(" + s_Game.GetOpponent(s_Game.PlayerTurn).SignOfPlayer + "): " + lastMoveStr);
+                Console.WriteLine(s_Game.GetOpponent(s_Game.PlayerTurn).Name + " Move's was " + "(" + s_Game.GetOpponent(s_Game.PlayerTurn).SignOfPlayer + "): " + s_LastMoveStr);
             }
             Console.WriteLine(i_ThePlayerIsTurn.Name + "'s Turn " + "(" + s_Game.PlayerTurn.SignOfPlayer + "):");
             Console.WriteLine();
@@ -157,10 +157,9 @@ namespace Checkers
                     {
                         s_Game.IsQuited = true;
                         i_ThePlayerIsTurn.Quit();
-                        s_Game.PlayerQuited(i_ThePlayerIsTurn.ID);
-                        //return; /// change
-                        isExit = true;///change
-                        checkIfReadGood = true; ///change
+                        //s_Game.PlayerQuited(i_ThePlayerIsTurn.ID);
+                        isExit = true;
+                        checkIfReadGood = true; 
                     }
                     if (!isExit)
                     { ///change
@@ -246,7 +245,7 @@ namespace Checkers
                 //nextTurn(s_Game.PlayerTurn);
                 if (s_LastMoveStr != null)
                 {
-                    Console.WriteLine(s_Game.PlayerTurn.Name + "Move's was : " + lastMoveStr);
+                    Console.WriteLine(s_Game.PlayerTurn.Name + "Move's was : " + s_LastMoveStr);
                 }
                 Console.WriteLine(s_Game.PlayerTurn.Name + " Turn:");
                 playerMoveView(s_Game.PlayerTurn);

@@ -45,21 +45,25 @@ namespace Checkers.Model
                 if (Player2.CountOfPiecesForPlayer == 0)
                 {
                     Player1.HasWonAndUpdateTheScore(Player2, Board);
+                    WinnerID = Player1.ID;
                     GameEnded = true;
                 }
-                else if (Player2.CountOfPiecesForPlayer == 0)
+                else if (Player1.CountOfPiecesForPlayer == 0)
                 {
                     Player2.HasWonAndUpdateTheScore(Player1, Board);
+                    WinnerID = Player2.ID;
                     GameEnded = true;
                 }
                 else if (Player1.HasQuitted)
                 {
                     Player2.HasWonAndUpdateTheScore(Player1, Board);
+                    WinnerID = Player2.ID;
                     GameEnded = true;
                 }
                 else if (Player2.HasQuitted)
                 {
                     Player1.HasWonAndUpdateTheScore(Player2, Board);
+                    WinnerID = Player1.ID;
                     GameEnded = true;
                 }
             }
@@ -68,8 +72,7 @@ namespace Checkers.Model
         }
         public void PlayerQuited(e_PlayerID i_ID)
         {
-            
-
+       
             if (Player1.ID== i_ID)
             {
                 Player2.HasWonAndUpdateTheScore(Player1,Board);
