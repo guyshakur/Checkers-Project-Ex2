@@ -28,9 +28,11 @@ namespace Checkers.Model
 			Board = board;
 			Board.updateBoardGame(this, oldX, oldY, newX, newY);
 		}
-		public void Quit()
+		public e_PlayerID Quit()
 		{
+			//i_OppPlayer.Score+= Math.Max(1,  i_OppPlayer.updatePlayerPoints() - updatePlayerPoints());
 
+			return ID;
 		}
 
 		public String Name
@@ -73,14 +75,17 @@ namespace Checkers.Model
 		}
 
 		
-        public  void HasWonAndUpdateTheScore(Player i_OppPlayer)
+        public void HasWonAndUpdateTheScore(Player i_OppPlayer,Board i_Board)
         {
-			Score=updatePlayerPoints() - i_OppPlayer.updatePlayerPoints();
+			Board = i_Board;
+			//if someone wins its minimum of 1 (in case of 1 of the players quit and there tie but still the quiting is losing
+			Score += Math.Max(1,updatePlayerPoints(Board) - i_OppPlayer.updatePlayerPoints(Board));
         }
 
 		//counting the piecsed for player and if it's king it's equals 4 points
-        private int updatePlayerPoints()
+        private int updatePlayerPoints(Board i_Board)
         {
+			Board = i_Board;
 			int points = 0;
             for (int y=0; y < Board.BoardSize; y++)
             {
@@ -103,9 +108,9 @@ namespace Checkers.Model
 			return points;
         }
 
-        public void CheckInPieceIfCanTOEat(int i_X, int i_Y, ref List<int> io_CurrentPlace, ref List<int> io_NextPlace)
+		public void CheckInPieceIfCanTOEat(int i_X, int i_Y, ref List<int> io_CurrentPlace, ref List<int> io_NextPlace)
 		{
-			if (i_X > 1 && i_Y > 1 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.FIRST))//i can eat up and left
+			if (i_X > 2 && i_Y > 2 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.FIRST))//i can eat up and left
 			{//--
 				if (Board.getCellContent(i_X - 1, i_Y - 1) != null
 					&& Board.getCellContent(i_X - 1, i_Y - 1).Player.ID != ID
@@ -115,10 +120,10 @@ namespace Checkers.Model
 					io_CurrentPlace.Add(i_X);
 					io_CurrentPlace.Add(i_Y);
 					io_NextPlace.Add(i_X - 2);
-					io_NextPlace.Add(i_Y - 2 );
+					io_NextPlace.Add(i_Y - 2);
 				}
 			}
-			if (i_X > 1 && i_Y < Board.BoardSize -1 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.SECOND))//i can eat down and left
+			if (i_X > 2 && i_Y < Board.BoardSize - 2 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.SECOND))//i can eat down and left
 			{//-+
 				if (Board.getCellContent(i_X - 1, i_Y + 1) != null
 					&& Board.getCellContent(i_X - 1, i_Y + 1).Player.ID != ID
@@ -131,7 +136,7 @@ namespace Checkers.Model
 					io_NextPlace.Add(i_Y + 2);
 				}
 			}
-			if (i_X < Board.BoardSize - 1 && i_Y > 1 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.FIRST))//i can eat up and right
+			if (i_X < Board.BoardSize - 2 && i_Y > 2 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.FIRST))//i can eat up and right
 			{//+-
 				if (Board.getCellContent(i_X + 1, i_Y - 1) != null
 					&& Board.getCellContent(i_X + 1, i_Y - 1).Player.ID != ID
@@ -144,7 +149,7 @@ namespace Checkers.Model
 					io_NextPlace.Add(i_Y - 2);
 				}
 			}
-			if (i_X < Board.BoardSize - 1 && i_Y < Board.BoardSize - 1 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.FIRST))//i can eat down and left
+			if (i_X < Board.BoardSize - 2 && i_Y < Board.BoardSize - 2 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.SECOND))//i can eat down and left
 			{//++
 				if (Board.getCellContent(i_X + 1, i_Y + 1) != null
 					&& Board.getCellContent(i_X + 1, i_Y + 1).Player.ID != ID
@@ -157,74 +162,6 @@ namespace Checkers.Model
 					io_NextPlace.Add(i_Y + 2);
 				}
 			}
-			/*int moveSoldierUpOrDown = ID == e_PlayerID.FIRST ? -1 : 1;
-			if (Board.getCellContent(i_X, i_Y).Rank == e_Rank.SOLDIER)
-			{
-				if (i_X < Board.BoardSize - 1 && i_Y< Board.BoardSize - 1 && i_Y > 1 
-					&& Board.getCellContent(i_X + 1, i_Y + moveSoldierUpOrDown) != null
-					&& Board.getCellContent(i_X + 1, i_Y + moveSoldierUpOrDown).Player.ID != ID
-					&& Board.getCellContent(i_X + 2, i_Y + 2 * moveSoldierUpOrDown) == null)
-
-				{
-					io_CurrentPlace.Add(i_X);
-					io_CurrentPlace.Add(i_Y);
-					io_NextPlace.Add(i_X + 2);
-					io_NextPlace.Add(i_Y + 2 * moveSoldierUpOrDown);
-				}
-				else if ( i_X > 1 &&  i_Y < Board.BoardSize - 1 && i_Y > 1 
-					&& Board.getCellContent(i_X - 1, i_Y + moveSoldierUpOrDown) != null
-					&& Board.getCellContent(i_X - 1, i_Y + moveSoldierUpOrDown).Player.ID != ID
-					&& Board.getCellContent(i_X - 2, i_Y + 2 * moveSoldierUpOrDown) == null)
-				{
-					io_CurrentPlace.Add(i_X);
-					io_CurrentPlace.Add(i_Y);
-					io_NextPlace.Add(i_X - 2);
-					io_NextPlace.Add(i_Y + 2 * moveSoldierUpOrDown);
-				}
-			}
-			else if (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING)
-			{
-				if (i_X < Board.BoardSize - 1 && i_Y < Board.BoardSize - 1 && i_Y > 1 
-					&& Board.getCellContent(i_X + 1, i_Y + 1) != null
-					&& Board.getCellContent(i_X + 1, i_Y + 1).Player.ID != ID
-					&& Board.getCellContent(i_X + 2, i_Y + 2) == null)
-				{
-					io_CurrentPlace.Add(i_X);
-					io_CurrentPlace.Add(i_Y);
-					io_NextPlace.Add(i_X + 2);
-					io_NextPlace.Add(i_Y + 2);
-				}
-				else if (i_X > 1 && i_Y < Board.BoardSize - 1 && i_Y > 1 
-					&& Board.getCellContent(i_X - 1, i_Y + 1) != null
-					&& Board.getCellContent(i_X - 1, i_Y + 1).Player.ID != ID
-					&& Board.getCellContent(i_X - 2, i_Y + 2) == null)
-				{
-					io_CurrentPlace.Add(i_X);
-					io_CurrentPlace.Add(i_Y);
-					io_NextPlace.Add(i_X - 2);
-					io_NextPlace.Add(i_Y + 2);
-				}
-				else if (i_X < Board.BoardSize - 1 && i_Y < Board.BoardSize - 1 && i_Y > 1 
-					&& Board.getCellContent(i_X + 1, i_Y - 1) != null
-					&& Board.getCellContent(i_X + 1, i_Y - 1).Player.ID != ID
-					&& Board.getCellContent(i_X + 2, i_Y - 2) == null)
-					{
-					io_CurrentPlace.Add(i_X);
-					io_CurrentPlace.Add(i_Y);
-					io_NextPlace.Add(i_X + 2);
-					io_NextPlace.Add(i_Y - 1);
-				}
-				else if (i_X > 1 && i_Y < Board.BoardSize - 1 && i_Y > 1 
-					&& Board.getCellContent(i_X - 1, i_Y - 1) != null
-					&& Board.getCellContent(i_X - 1, i_Y - 1).Player.ID != ID
-					&& Board.getCellContent(i_X - 2, i_Y - 2) == null)
-					{
-					io_CurrentPlace.Add(i_X);
-					io_CurrentPlace.Add(i_Y);
-					io_NextPlace.Add(i_X - 2);
-					io_NextPlace.Add(i_Y - 2);
-				}
-			}*/
 		}
 		public bool RunOnAllBoardGame(out List<int> o_CurrentPlace, out List<int> o_NextPlace)
 		{
