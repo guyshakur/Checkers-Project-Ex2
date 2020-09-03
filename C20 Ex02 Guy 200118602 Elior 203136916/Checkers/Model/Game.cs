@@ -69,7 +69,7 @@ namespace Checkers.Model
 
         public void PlayerQuited(e_PlayerID i_ID)
         {
-            IsQuited = true;
+            
 
             if (Player1.ID== i_ID)
             {

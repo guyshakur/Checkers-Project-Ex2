@@ -184,7 +184,13 @@ namespace Checkers.Model
 			}
 			return !(o_CurrentPlace.Count == 0);
 		}
-		public bool hasAnyMoves()
+
+        public void RandomMove()
+        {
+            
+        }
+
+        public bool hasAnyMoves()
 		{
 			return true;
 		}

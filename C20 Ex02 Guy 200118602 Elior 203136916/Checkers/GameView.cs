@@ -115,11 +115,12 @@ namespace Checkers
 
             if (s_Game.WinnerID == e_PlayerID.FIRST)
             {
-                Console.Write("The winner is :  " + s_Game.PlayerTurn.Name + "With score of: " + s_Game.PlayerTurn.Score);
+              
+               
             }
             else
             {
-                Console.Write("The winner is :  " + Player2.Name + "With score of: " + Player2.Score);
+                
             }
             
 
@@ -146,11 +147,14 @@ namespace Checkers
             {
                 Console.WriteLine(s_Game.GetOpponent(s_Game.PlayerTurn).Name + " Move's was " + "(" + s_Game.GetOpponent(s_Game.PlayerTurn).SignOfPlayer + "): " + lastMoveStr);
             }
-
-            Console.WriteLine(i_ThePlayerIsTurn.Name + "'s Turn " + "(" + s_Game.PlayerTurn.SignOfPlayer + "):");
-            Console.WriteLine();
-            Console.WriteLine("Press Q to quit");
-
+            
+                Console.WriteLine(i_ThePlayerIsTurn.Name + "'s Turn " + "(" + s_Game.PlayerTurn.SignOfPlayer + "):");
+                Console.WriteLine();
+                Console.WriteLine("Press Q to quit");
+            if(s_NumOfPlayers==1 && i_ThePlayerIsTurn.ID==e_PlayerID.SECOND)
+            {
+                i_ThePlayerIsTurn.RandomMove();
+            }
             String MoveStrFromUser;
             bool checkIfReadGood;
             e_Eat theMoveIsEating = e_Eat.NotCanEat;
@@ -162,6 +166,7 @@ namespace Checkers
 
                 if (MoveStrFromUser.Contains("Q"))
                 {
+                    s_Game.IsQuited = true;
                     s_Game.PlayerQuited(i_ThePlayerIsTurn.ID);
                     return;
                 }
