@@ -1,27 +1,18 @@
 ﻿using System;
 using Ex02.ConsoleUtils;
 using Checkers.Model;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading;
 
 namespace Checkers
 {
     class GameView
-
-
-
     {
-
         private static int s_NumOfPlayers;
         private static Game s_Game;
-        private static string lastMoveStr = null;
-        private static string signOfPlayerPiece = null;
-
+        private static string s_LastMoveStr = null;
+        private static string s_SignOfPlayerPiece = null;
         public static Board Board { get; set; }
-
         public static int BoardSize { get; set; }
-
         public static int NumOfPlayers
         {
             get
@@ -40,13 +31,8 @@ namespace Checkers
                 }
             }
         }
-
         public static Player Player1 { get; set; }
-
-
         public static Player Player2 { get; set; }
-
-
         public static void InitiaizeGame()
         {
             Screen.Clear();
@@ -54,7 +40,6 @@ namespace Checkers
             Console.WriteLine();
             getUserInitialInput();
         }
-
         private static void getUserInitialInput()
         {
             Player1.Name = getFromUser("Enter your name (Max size 20 without spaces): ", 20);
@@ -69,7 +54,6 @@ namespace Checkers
                 Player2.Name = "Computer";
             }
         }
-
         private static String getFromUser(string i_Msg, params int[] i_Numbers)
         {
             //if in numers have just 1 -> name of user.
@@ -91,18 +75,13 @@ namespace Checkers
                             (players != i_Numbers[0] && players != i_Numbers[1] && players != i_Numbers[2]))));
             return result;
         }
-
         public static void startCheckerGame()
         {
-
             Player1 = new Player(e_PlayerID.FIRST);
             Player2 = new Player(e_PlayerID.SECOND);
             Player1.SignOfPlayer = "X";
             Player2.SignOfPlayer = "O";
-
             InitiaizeGame();
-
-
             BoardSize = Board.InitialFilledRowsForPlayer;
             Board = new Board(BoardSize, Player1, Player2);
             s_Game = new Game(Player1, Player2, Board);
@@ -113,18 +92,13 @@ namespace Checkers
                 PrintBoard();
                 playerMoveView(s_Game.PlayerTurn);
             }
-
             printScoreAndAskForMoreGame();
-
-
-
         }
 
         private static void printScoreAndAskForMoreGame()
         {
             Console.WriteLine();
             Console.WriteLine();
-
             if (s_Game.WinnerID == e_PlayerID.FIRST)
             {
                 Console.WriteLine("The Winner is: " + Player1.Name);
@@ -140,34 +114,28 @@ namespace Checkers
             Console.WriteLine("The Score is: " + Player1.Name + ": " + Player1.Score);
             Console.WriteLine("The Score is: " + Player2.Name + ": " + Player2.Score);
         }
-
         private static void playerMoveView(Player i_ThePlayerIsTurn)
         {
-
             bool isExit = false;///change
             if (i_ThePlayerIsTurn.ID == e_PlayerID.FIRST)
             {
-                signOfPlayerPiece = "X";
+                s_SignOfPlayerPiece = "X";
             }
             else
             {
-                signOfPlayerPiece = "O";
+                s_SignOfPlayerPiece = "O";
 
             }
-
-
-            if (lastMoveStr != null)
+            if (s_LastMoveStr != null)
             {
                 Console.WriteLine(s_Game.GetOpponent(s_Game.PlayerTurn).Name + " Move's was " + "(" + s_Game.GetOpponent(s_Game.PlayerTurn).SignOfPlayer + "): " + lastMoveStr);
             }
-
             Console.WriteLine(i_ThePlayerIsTurn.Name + "'s Turn " + "(" + s_Game.PlayerTurn.SignOfPlayer + "):");
             Console.WriteLine();
             Console.WriteLine("Press Q to quit");
             String MoveStrFromUser;
             bool checkIfReadGood;
             e_Eat theMoveIsEating = e_Eat.NotCanEat;
-
             if (s_NumOfPlayers == 1 && i_ThePlayerIsTurn.ID == e_PlayerID.SECOND)
             {
                 MoveStrFromUser = i_ThePlayerIsTurn.RandomMove();
@@ -188,6 +156,7 @@ namespace Checkers
                     if (MoveStrFromUser.Contains("Q"))
                     {
                         s_Game.IsQuited = true;
+                        i_ThePlayerIsTurn.Quit();
                         s_Game.PlayerQuited(i_ThePlayerIsTurn.ID);
                         //return; /// change
                         isExit = true;///change
@@ -203,7 +172,6 @@ namespace Checkers
                             MoveStrFromUser[4] < 'a' || MoveStrFromUser[4] > (char)(BoardSize + (int)'a' - 1)
                             || (!i_ThePlayerIsTurn.isValidMove(Board, (int)MoveStrFromUser[0] - (int)'A', (int)MoveStrFromUser[1] - (int)'a', (int)MoveStrFromUser[3] - 'A', (int)MoveStrFromUser[4] - 'a')))
                         {
-
                             checkIfReadGood = false;
                             Console.WriteLine("The move is wrong please try again:");
                         }
@@ -226,18 +194,17 @@ namespace Checkers
                 ///and in thr fun to call to PrintBoard after the soldier moved.
                 ///
             }
-            //if (!isExit)///change
-           // {///change
+            if (!isExit)///change
+            {///change
                 i_ThePlayerIsTurn.movePiece(Board, (int)MoveStrFromUser[0] - (int)'A', (int)MoveStrFromUser[1] - (int)'a', (int)MoveStrFromUser[3] - 'A', (int)MoveStrFromUser[4] - 'a');
                 if (!((theMoveIsEating == e_Eat.EAT) && (i_ThePlayerIsTurn.checkIfCanMoreEatAfterEat(MoveStrFromUser))))
                 {
                     s_Game.PlayerTurn = s_Game.GetOpponent(i_ThePlayerIsTurn);
                 }
 
-                lastMoveStr = MoveStrFromUser;
+                s_LastMoveStr = MoveStrFromUser;
                 PrintBoard();
-
-            //}///change
+            }///change
         }
         private static void PrintBoard()
         {
@@ -246,7 +213,6 @@ namespace Checkers
             StringBuilder paint = new StringBuilder("");
             paint.AppendLine(" " + boardHeader.Substring(0, BoardSize * 4));
             paint.AppendLine("  " + new String('=', BoardSize * 4 + 1));
-
             string boardSideHeader = "abcdefghij";
             for (int y = 0; y < BoardSize; y++)
             {
@@ -271,34 +237,24 @@ namespace Checkers
             paint.AppendLine();
             paint.AppendLine();
             Console.WriteLine(paint);
-
-
-
         }
-
         public static void PrintTheNextMoveOfPlayer()
         {
-
             while (s_Game.PlayerTurn.hasAnyMoves())
             {
                 //s_Game.PlayerTurn = s_Game.GetOpponent(s_Game.PlayerTurn);
                 //nextTurn(s_Game.PlayerTurn);
-                if (lastMoveStr != null)
+                if (s_LastMoveStr != null)
                 {
                     Console.WriteLine(s_Game.PlayerTurn.Name + "Move's was : " + lastMoveStr);
-
                 }
                 Console.WriteLine(s_Game.PlayerTurn.Name + " Turn:");
-
                 playerMoveView(s_Game.PlayerTurn);
-
             }
         }
-
         private static string getCellAsString(Piece i_GamePiece)
         {
             string stringReturn = " ";
-
             if (i_GamePiece == null)
             {
                 stringReturn = " ";
@@ -311,11 +267,8 @@ namespace Checkers
             else if (i_GamePiece.Player.ID == e_PlayerID.SECOND)
             {
                 stringReturn = i_GamePiece.Rank == e_Rank.SOLDIER ? "O" : "U";
-
             }
             return stringReturn;
         }
-
-
     }
 }
