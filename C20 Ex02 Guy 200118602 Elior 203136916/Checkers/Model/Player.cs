@@ -74,7 +74,9 @@ namespace Checkers.Model
 			{
 				if (i_X < Board.BoardSize - 1 && i_Y< Board.BoardSize - 1 && i_Y > 1 
 					&& Board.getCellContent(i_X + 1, i_Y + moveSoldierUpOrDown) != null
-					&& Board.getCellContent(i_X + 1, i_Y + moveSoldierUpOrDown).Player.ID != ID)
+					&& Board.getCellContent(i_X + 1, i_Y + moveSoldierUpOrDown).Player.ID != ID
+					&& Board.getCellContent(i_X + 2, i_Y + 2 * moveSoldierUpOrDown) == null)
+
 				{
 					io_CurrentPlace.Add(i_X);
 					io_CurrentPlace.Add(i_Y);
@@ -83,19 +85,21 @@ namespace Checkers.Model
 				}
 				else if ( i_X > 1 &&  i_Y < Board.BoardSize - 1 && i_Y > 1 
 					&& Board.getCellContent(i_X - 1, i_Y + moveSoldierUpOrDown) != null
-					&& Board.getCellContent(i_X - 1, i_Y + moveSoldierUpOrDown).Player.ID != ID)
+					&& Board.getCellContent(i_X - 1, i_Y + moveSoldierUpOrDown).Player.ID != ID
+					&& Board.getCellContent(i_X - 2, i_Y + 2 * moveSoldierUpOrDown) == null)
 				{
 					io_CurrentPlace.Add(i_X);
 					io_CurrentPlace.Add(i_Y);
 					io_NextPlace.Add(i_X - 2);
-					io_NextPlace.Add(i_Y - 2 * moveSoldierUpOrDown);
+					io_NextPlace.Add(i_Y + 2 * moveSoldierUpOrDown);
 				}
 			}
 			else if (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING)
 			{
 				if (i_X < Board.BoardSize - 1 && i_Y < Board.BoardSize - 1 && i_Y > 1 
 					&& Board.getCellContent(i_X + 1, i_Y + 1) != null
-					&& Board.getCellContent(i_X + 1, i_Y + 1).Player.ID != ID)
+					&& Board.getCellContent(i_X + 1, i_Y + 1).Player.ID != ID
+					&& Board.getCellContent(i_X + 2, i_Y + 2) == null)
 				{
 					io_CurrentPlace.Add(i_X);
 					io_CurrentPlace.Add(i_Y);
@@ -104,7 +108,8 @@ namespace Checkers.Model
 				}
 				else if (i_X > 1 && i_Y < Board.BoardSize - 1 && i_Y > 1 
 					&& Board.getCellContent(i_X - 1, i_Y + 1) != null
-					&& Board.getCellContent(i_X - 1, i_Y + 1).Player.ID != ID)
+					&& Board.getCellContent(i_X - 1, i_Y + 1).Player.ID != ID
+					&& Board.getCellContent(i_X - 2, i_Y + 2) == null)
 				{
 					io_CurrentPlace.Add(i_X);
 					io_CurrentPlace.Add(i_Y);
@@ -113,7 +118,8 @@ namespace Checkers.Model
 				}
 				else if (i_X < Board.BoardSize - 1 && i_Y < Board.BoardSize - 1 && i_Y > 1 
 					&& Board.getCellContent(i_X + 1, i_Y - 1) != null
-					&& Board.getCellContent(i_X + 1, i_Y - 1).Player.ID != ID)
+					&& Board.getCellContent(i_X + 1, i_Y - 1).Player.ID != ID
+					&& Board.getCellContent(i_X + 2, i_Y - 2) == null)
 					{
 					io_CurrentPlace.Add(i_X);
 					io_CurrentPlace.Add(i_Y);
@@ -122,7 +128,8 @@ namespace Checkers.Model
 				}
 				else if (i_X > 1 && i_Y < Board.BoardSize - 1 && i_Y > 1 
 					&& Board.getCellContent(i_X - 1, i_Y - 1) != null
-					&& Board.getCellContent(i_X - 1, i_Y - 1).Player.ID != ID)
+					&& Board.getCellContent(i_X - 1, i_Y - 1).Player.ID != ID
+					&& Board.getCellContent(i_X - 2, i_Y - 2) == null)
 					{
 					io_CurrentPlace.Add(i_X);
 					io_CurrentPlace.Add(i_Y);
