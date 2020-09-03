@@ -5,6 +5,8 @@ namespace Checkers.Model
 {
     class Game
     {
+        public enum e_StatusOFGame { NOTFINISH,WIN, TIE };
+        public static bool GameEnded { get; set; }
         public bool IsQuited { get; set; }
         public e_PlayerID WinnerID { get; set; }
         public Player Player1 { get; set; }
@@ -36,37 +38,34 @@ namespace Checkers.Model
 
         public bool GameLoop()
         {
-            bool gameEnded = false;
-            if (!gameEnded)
-            {
-                
-                if(Player2.CountOfPiecesForPlayer == 0)
-                {
-                    
-                    Player1.HasWonAndUpdateTheScore(Player2,Board);
-                    WinnerID = Player1.ID;
-                    gameEnded = true;
-                    
-                }
-                else if(Player1.CountOfPiecesForPlayer == 0)
-                {
-                    Player2.HasWonAndUpdateTheScore(Player1,Board);
-                    WinnerID = Player2.ID;
-                    gameEnded = true;
-                }
+            GameEnded = false;
 
-                if(IsQuited)
+            if (!GameEnded)
+            {
+                if (Player2.CountOfPiecesForPlayer == 0)
                 {
-                    PlayerQuited(PlayerTurn.ID);
-                    WinnerID = PlayerTurn.ID;
-                    gameEnded = true;
+                    Player1.HasWonAndUpdateTheScore(Player2, Board);
+                    GameEnded = true;
                 }
-                
+                else if (Player2.CountOfPiecesForPlayer == 0)
+                {
+                    Player2.HasWonAndUpdateTheScore(Player1, Board);
+                    GameEnded = true;
+                }
+                else if (Player1.HasQuitted)
+                {
+                    Player2.HasWonAndUpdateTheScore(Player1, Board);
+                    GameEnded = true;
+                }
+                else if (Player2.HasQuitted)
+                {
+                    Player1.HasWonAndUpdateTheScore(Player2, Board);
+                    GameEnded = true;
+                }
             }
 
-            return gameEnded;
+            return GameEnded;
         }
-
         public void PlayerQuited(e_PlayerID i_ID)
         {
             

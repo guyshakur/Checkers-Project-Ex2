@@ -10,11 +10,25 @@ namespace Checkers.Model
 	
 	class Player
 	{
+		public bool HasQuitted { get; set; }
 		public string SignOfPlayer { get; set; }
 		public int CountOfPiecesForPlayer { get; set; }
 		private String m_Name;
 		private e_PlayerID m_ID;
-		public Board Board { get; set; }
+
+		private static Board s_Board;
+		public Board Board
+		{
+			get
+			{
+				return s_Board;
+			}
+			set
+			{
+				s_Board = value;
+			}
+		}
+
 		public int Score { get; set; }
 		public Player(e_PlayerID i_PlayerID)
 		{
@@ -28,11 +42,10 @@ namespace Checkers.Model
 			Board = board;
 			Board.updateBoardGame(this, oldX, oldY, newX, newY);
 		}
-		public e_PlayerID Quit()
+		public void Quit()
 		{
-			//i_OppPlayer.Score+= Math.Max(1,  i_OppPlayer.updatePlayerPoints() - updatePlayerPoints());
-
-			return ID;
+			HasQuitted = true;
+			
 		}
 
 		public String Name
@@ -185,12 +198,98 @@ namespace Checkers.Model
 			return !(o_CurrentPlace.Count == 0);
 		}
 
-        public void RandomMove()
-        {
-            
-        }
+		public string RandomMove()
+		{
+			List<int> currentPlace;
+			List<int> nextPlace;
+			string move = "";
+			Random random = new Random();
+			int resultRandom;
+			if (RunOnAllBoardGame(out currentPlace, out nextPlace))
+			{
 
-        public bool hasAnyMoves()
+				move = string.Format("{0}{1}>{2}{3}",
+					(char)(currentPlace[0] + (int)'A'), (char)(currentPlace[1] + (int)'a'),
+					(char)(nextPlace[0] + (int)'A'), (char)(nextPlace[1] + (int)'a'));
+			}
+			else
+			{
+				if (allMoves(out currentPlace, out nextPlace))
+				{
+					resultRandom = random.Next((currentPlace.Count) / 2);
+					move = string.Format("{0}{1}>{2}{3}",
+						(char)(currentPlace[resultRandom * 2] + (int)'A'), (char)(currentPlace[(resultRandom * 2) + 1] + (int)'a'),
+						(char)(nextPlace[resultRandom * 2] + (int)'A'), (char)(nextPlace[(resultRandom * 2) + 1] + (int)'a'));
+				}
+			}
+			return move;
+		}
+		private bool allMoves(out List<int> o_CurrentPlace, out List<int> o_NextPlace)
+		{
+			o_CurrentPlace = new List<int>(0);
+			o_NextPlace = new List<int>(0);
+
+
+			for (int i = 0; i < Board.BoardSize; i++)
+			{
+				for (int j = 0; j < Board.BoardSize; j++)
+				{
+					if (Board.getCellContent(j, i) != null)
+					{
+						if (Board.getCellContent(j, i).Player.ID == ID)
+						{
+							CheckInPieceIfCanTOMov(j, i, ref o_CurrentPlace, ref o_NextPlace);
+						}
+					}
+				}
+			}
+			return !(o_CurrentPlace.Count == 0);
+		}
+		public void CheckInPieceIfCanTOMov(int i_X, int i_Y, ref List<int> io_CurrentPlace, ref List<int> io_NextPlace)
+		{
+			if (i_X > 0 && i_Y > 0 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.FIRST))
+			{//--
+				if (Board.getCellContent(i_X - 1, i_Y - 1) == null)
+				{
+					io_CurrentPlace.Add(i_X);
+					io_CurrentPlace.Add(i_Y);
+					io_NextPlace.Add(i_X - 1);
+					io_NextPlace.Add(i_Y - 1);
+				}
+			}
+			if (i_X > 0 && i_Y < Board.BoardSize - 1 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.SECOND))
+			{//-+
+				if (Board.getCellContent(i_X - 1, i_Y + 1) == null)
+				{
+					io_CurrentPlace.Add(i_X);
+					io_CurrentPlace.Add(i_Y);
+					io_NextPlace.Add(i_X - 1);
+					io_NextPlace.Add(i_Y + 1);
+				}
+			}
+			if (i_X < Board.BoardSize - 1 && i_Y > 0 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.FIRST))//i can eat up and right
+			{//+-
+				if (Board.getCellContent(i_X + 1, i_Y - 1) == null)
+				{
+					io_CurrentPlace.Add(i_X);
+					io_CurrentPlace.Add(i_Y);
+					io_NextPlace.Add(i_X + 1);
+					io_NextPlace.Add(i_Y - 1);
+				}
+			}
+			if (i_X < Board.BoardSize - 1 && i_Y < Board.BoardSize - 1 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.SECOND))//i can eat down and left
+			{//++
+				if (Board.getCellContent(i_X + 1, i_Y + 1) == null)
+				{
+					io_CurrentPlace.Add(i_X);
+					io_CurrentPlace.Add(i_Y);
+					io_NextPlace.Add(i_X + 1);
+					io_NextPlace.Add(i_Y + 1);
+				}
+			}
+		}
+
+		public bool hasAnyMoves()
 		{
 			return true;
 		}
