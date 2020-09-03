@@ -133,7 +133,6 @@ namespace Checkers
             }
 
             player.Board = this;
-
         }
 
         public void updateCountOfPiecesForPlayerOpponentByID(e_PlayerID ID)
