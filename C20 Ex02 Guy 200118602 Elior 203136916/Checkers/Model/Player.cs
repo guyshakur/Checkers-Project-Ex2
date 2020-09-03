@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Checkers.Model
 {
 	public enum e_Eat { CanToEatButNot, EAT, NotCanEat }
 	public enum e_PlayerID { FIRST, SECOND }
+
+	
 	class Player
 	{
+		public string SignOfPlayer { get; set; }
 		public int CountOfPiecesForPlayer { get; set; }
 		private String m_Name;
 		private e_PlayerID m_ID;
@@ -56,7 +60,7 @@ namespace Checkers.Model
 			}
 		}
 
-		public e_PlayerID GetOpponent(Player player)
+		public e_PlayerID GetOpponentID(Player player)
 		{
 			if (player.ID == e_PlayerID.FIRST)
 			{
@@ -67,6 +71,8 @@ namespace Checkers.Model
 				return e_PlayerID.SECOND;
 			}
 		}
+
+		
 		public void CheckInPieceIfCanTOEat(int i_X, int i_Y, ref List<int> io_CurrentPlace, ref List<int> io_NextPlace)
 		{
 			int moveSoldierUpOrDown = ID == e_PlayerID.FIRST ? -1 : 1;
@@ -257,5 +263,6 @@ namespace Checkers.Model
 			return ret;
 		}
 
+		
 	}
 }

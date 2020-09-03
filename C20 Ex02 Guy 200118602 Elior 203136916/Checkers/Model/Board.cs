@@ -11,6 +11,9 @@ namespace Checkers
 
     class Board
     {
+        public Player Player1 { get; set; }
+        public Player Player2 { get; set; }
+
         public Piece[,] BoardGame
         {
             get
@@ -51,8 +54,12 @@ namespace Checkers
         {
             BoardSize = boardSize;
             BoardGame = new Piece[boardSize, boardSize];
-
+            Player1 = player1;
+            Player2 = player2;
             initialFilledRowsForPlayer = (boardSize - 2) / 2;
+
+            player1.CountOfPiecesForPlayer= ((boardSize - 2)/2) * (boardSize / 2);
+            player2.CountOfPiecesForPlayer = ((boardSize - 2) / 2) * (boardSize / 2);
 
             bool fillEvenCells = true;
 
@@ -118,14 +125,28 @@ namespace Checkers
 
             if (Math.Abs(newX- oldX) == 2 && Math.Abs(newY - oldY) == 2)
 			{
-                BoardGame[(oldX + newX) /2 , (oldY + newY) / 2] = null;
-            }
+              BoardGame[(oldX + newX) /2 , (oldY + newY) / 2] = null;
 
+                //the opponent's pieces count is now iccreent by 1.
+              updateCountOfPiecesForPlayerOpponentByID(player.GetOpponentID(player));
+
+            }
 
 
         }
 
-
+        public void updateCountOfPiecesForPlayerOpponentByID(e_PlayerID ID)
+        {
+            if(ID == e_PlayerID.FIRST)
+            {
+                Player2.CountOfPiecesForPlayer--;
+                
+            }
+            else
+            {
+                Player1.CountOfPiecesForPlayer--;
+            }
+        }
         
 
 

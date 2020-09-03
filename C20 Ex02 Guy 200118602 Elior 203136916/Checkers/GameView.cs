@@ -17,7 +17,7 @@ namespace Checkers
 		private static string lastMoveStr = null;
 		private static string signOfPlayerPiece = null;
 
-		public static Board Board { get; set; }
+		public static  Board Board { get; set; }
 
 		public static int BoardSize { get; set; }
 
@@ -96,13 +96,15 @@ namespace Checkers
 
 			Player1 = new Player(e_PlayerID.FIRST);
 			Player2 = new Player(e_PlayerID.SECOND);
+			Player1.SignOfPlayer = "X";
+			Player2.SignOfPlayer = "O";
 
 			InitiaizeGame();
 
-			s_Game = new Game(Player1, Player2);
+			
 			BoardSize = Board.InitialFilledRowsForPlayer;
 			Board = new Board(BoardSize, Player1, Player2);
-
+			s_Game = new Game(Player1,  Player2, Board);
 			while (s_Game.PlayerTurn.hasAnyMoves())
 			{
 				PrintBoard();
@@ -126,10 +128,10 @@ namespace Checkers
 			}
 			if (lastMoveStr != null)
 			{
-				Console.WriteLine(s_Game.GetOpponent(s_Game.PlayerTurn).Name + " Move's was " + "(" + signOfPlayerPiece + "): " + lastMoveStr);
+				Console.WriteLine(s_Game.GetOpponent(s_Game.PlayerTurn).Name + " Move's was " + "(" +  s_Game.GetOpponent(s_Game.PlayerTurn).SignOfPlayer + "): " + lastMoveStr);
 			}
 
-			Console.WriteLine(i_ThePlayerIsTurn.Name + "'s Turn: " + "(" + signOfPlayerPiece + ")");
+			Console.WriteLine(i_ThePlayerIsTurn.Name + "'s Turn " + "(" + i_ThePlayerIsTurn.CountOfPiecesForPlayer + "):");
 			String MoveStrFromUser;
 			bool checkIfReadGood;
 			e_Eat theMoveIsEating = e_Eat.NotCanEat;
