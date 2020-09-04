@@ -7,6 +7,7 @@ namespace Checkers
 {
 	class GameView
 	{
+		private static bool m_matchIsOver = false;
 		private static int s_NumOfPlayers;
 		private static Game s_Game;
 		private static string s_LastMoveStr = null;
@@ -79,7 +80,7 @@ namespace Checkers
 		}
 		public static void startCheckerGame()
 		{
-			bool matchIsOver = false;
+			m_matchIsOver = false;
 			Player1 = new Player(e_PlayerID.FIRST);
 			Player2 = new Player(e_PlayerID.SECOND);
 			Player1.SignOfPlayer = "X";
@@ -89,49 +90,30 @@ namespace Checkers
 			Board = new Board(BoardSize, Player1, Player2);
 			s_Game = new Game(Player1, Player2, Board);
 
-			while (!matchIsOver)
+			while (!m_matchIsOver)
 			{
 				//running the loop of game 
 				while (!s_Game.GameLoop())
 				{
-					
+
 					PrintBoard();
 					playerMoveView(s_Game.PlayerTurn);
+					
 				}
 				printScoreAndAskForMoreGame();
-				Console.WriteLine();
-				Console.WriteLine("Do you want to have a rematch? Y / N");
-				bool invalidInput = false;
-				do
-				{
-					string userInput = Console.ReadLine();
-					if(userInput=="Y" || userInput=="y")
-                    {
-						//s_Game.RefreshBoardGame();
-						Game.GameEnded = false;
-						invalidInput = true;
-						s_Game.PlayerTurn = Player1;
-						Board = new Board(BoardSize, Player1, Player2);
-						PrintBoard();
-						//playerMoveView(s_Game.PlayerTurn);
-
-					}
-					
-				} while (!invalidInput);
-			}
+				
+				
+			}//
 		}
-
-
-		
 		private static void printScoreAndAskForMoreGame()
 		{
 			Console.WriteLine();
 			Console.WriteLine();
-			if (s_Game.WinnerID == e_PlayerID.FIRST)
+			if (s_Game.WinnerID == e_PlayerID.FIRST && s_Game.e_GameStatus == e_StatusOFGame.WIN)
 			{
 				Console.WriteLine("The Winner is: " + Player1.Name);
 			}
-			else if (s_Game.WinnerID == e_PlayerID.SECOND)
+			else if (s_Game.WinnerID == e_PlayerID.SECOND && s_Game.e_GameStatus == e_StatusOFGame.WIN)
 			{
 				Console.WriteLine("The Winner is: " + Player2.Name);
 			}
@@ -141,6 +123,33 @@ namespace Checkers
 			}
 			Console.WriteLine("The Score is: " + Player1.Name + ": " + Player1.Score);
 			Console.WriteLine("The Score is: " + Player2.Name + ": " + Player2.Score);
+
+			Console.WriteLine();
+			Console.WriteLine("Do you want to have a rematch? Y / N");
+			bool invalidInput = false;
+			do
+			{
+				string userInput = Console.ReadLine();
+				if (userInput.Equals("Y") || userInput.Equals("y"))
+				{
+					invalidInput = true;
+					Board = new Board(BoardSize, Player1, Player2);
+					s_Game = new Game(Player1, Player2, Board);
+					s_Game.RefreshBoardGame();
+					s_LastMoveStr = null;
+				}
+				else if(userInput.Equals("N") || userInput.Equals("n"))
+                {
+					Screen.Clear();
+					getUserInitialInput();
+					
+				}
+                else
+                {
+					Console.WriteLine("Do you want to have a rematch? Y / N");
+				}
+
+			} while (!invalidInput);
 		}
 		private static void playerMoveView(Player i_ThePlayerIsTurn)
 		{
@@ -189,7 +198,7 @@ namespace Checkers
 					theMoveIsEating = e_Eat.NotCanEat;
 					MoveStrFromUser = Console.ReadLine();
 
-					if (MoveStrFromUser.Contains("Q"))
+					if (MoveStrFromUser.Equals("Q"))
 					{
 						s_Game.IsQuited = true;
 						i_ThePlayerIsTurn.Quit();
@@ -278,21 +287,7 @@ namespace Checkers
 			paint.AppendLine();
 			Console.WriteLine(paint);
 		}
-		public static void PrintTheNextMoveOfPlayer()
-		{
-			while (s_Game.PlayerTurn.hasAnyMoves())
-			{
-				//s_Game.PlayerTurn = s_Game.GetOpponent(s_Game.PlayerTurn);
-				//nextTurn(s_Game.PlayerTurn);
-				if (s_LastMoveStr != null)
-				{
-					Console.WriteLine(s_Game.PlayerTurn.Name + "Move's was : " + s_LastMoveStr);
-					s_MoreEating = false;
-				}
-				Console.WriteLine(s_Game.PlayerTurn.Name + " Turn:");
-				playerMoveView(s_Game.PlayerTurn);
-			}
-		}
+		
 		private static string getCellAsString(Piece i_GamePiece)
 		{
 			string stringReturn = " ";

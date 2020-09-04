@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 namespace Checkers.Model
 {
 	public enum e_Eat { CanToEatButNot, EAT, NotCanEat }
-	public enum e_PlayerID { FIRST, SECOND }
+	public enum e_PlayerID { FIRST, SECOND, TIE }
 
 
 	class Player
@@ -226,7 +226,7 @@ namespace Checkers.Model
 			}
 			return move;
 		}
-		private bool allMoves(out List<int> o_CurrentPlace, out List<int> o_NextPlace)
+		public bool allMoves(out List<int> o_CurrentPlace, out List<int> o_NextPlace)
 		{
 			o_CurrentPlace = new List<int>(0);
 			o_NextPlace = new List<int>(0);
