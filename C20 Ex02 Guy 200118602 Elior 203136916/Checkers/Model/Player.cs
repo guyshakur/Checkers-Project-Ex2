@@ -7,7 +7,7 @@ namespace Checkers.Model
 	public enum e_Eat { CanToEatButNot, EAT, NotCanEat }
 	public enum e_PlayerID { FIRST, SECOND }
 
-	
+
 	class Player
 	{
 		public bool HasQuitted { get; set; }
@@ -45,7 +45,7 @@ namespace Checkers.Model
 		public void Quit()
 		{
 			HasQuitted = true;
-			
+
 		}
 
 		public String Name
@@ -63,7 +63,7 @@ namespace Checkers.Model
 				}
 			}
 		}
-		public e_PlayerID ID 
+		public e_PlayerID ID
 		{
 			get
 			{
@@ -87,43 +87,43 @@ namespace Checkers.Model
 			}
 		}
 
-		
-        public void HasWonAndUpdateTheScore(Player i_OppPlayer,Board i_Board)
-        {
+
+		public void HasWonAndUpdateTheScore(Player i_OppPlayer, Board i_Board)
+		{
 			Board = i_Board;
 			//if someone wins its minimum of 1 (in case of 1 of the players quit and there tie but still the quiting is losing
-			Score += Math.Max(1,updatePlayerPoints(Board) - i_OppPlayer.updatePlayerPoints(Board));
-        }
+			Score += Math.Max(1, updatePlayerPoints(Board) - i_OppPlayer.updatePlayerPoints(Board));
+		}
 
 		//counting the piecsed for player and if it's king it's equals 4 points
-        private int updatePlayerPoints(Board i_Board)
-        {
+		private int updatePlayerPoints(Board i_Board)
+		{
 			Board = i_Board;
 			int points = 0;
-            for (int y=0; y < Board.BoardSize; y++)
-            {
-				for (int x=0; x < Board.BoardSize; x++)
-                {
-					if(Board.getCellContent(x,y)!=null)
-                    {
-						if(Board.getCellContent(x,y).Player.ID == ID && Board.getCellContent(x,y).Rank==e_Rank.SOLDIER)
-                        {
+			for (int y = 0; y < Board.BoardSize; y++)
+			{
+				for (int x = 0; x < Board.BoardSize; x++)
+				{
+					if (Board.getCellContent(x, y) != null)
+					{
+						if (Board.getCellContent(x, y).Player.ID == ID && Board.getCellContent(x, y).Rank == e_Rank.SOLDIER)
+						{
 							points++;
-                        }
-						else if(Board.getCellContent(x, y).Player.ID == ID && Board.getCellContent(x, y).Rank == e_Rank.KING)
-                        {
-							points+=4;
+						}
+						else if (Board.getCellContent(x, y).Player.ID == ID && Board.getCellContent(x, y).Rank == e_Rank.KING)
+						{
+							points += 4;
 
 						}
-                    }
-                }
-            }
+					}
+				}
+			}
 			return points;
-        }
+		}
 
 		public void CheckInPieceIfCanTOEat(int i_X, int i_Y, ref List<int> io_CurrentPlace, ref List<int> io_NextPlace)
 		{
-			if (i_X > 2 && i_Y > 2 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.FIRST))//i can eat up and left
+			if (i_X > 1 && i_Y > 1 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.FIRST))//i can eat up and left
 			{//--
 				if (Board.getCellContent(i_X - 1, i_Y - 1) != null
 					&& Board.getCellContent(i_X - 1, i_Y - 1).Player.ID != ID
@@ -136,7 +136,7 @@ namespace Checkers.Model
 					io_NextPlace.Add(i_Y - 2);
 				}
 			}
-			if (i_X > 2 && i_Y < Board.BoardSize - 2 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.SECOND))//i can eat down and left
+			if (i_X > 1 && i_Y < Board.BoardSize - 2 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.SECOND))//i can eat down and left
 			{//-+
 				if (Board.getCellContent(i_X - 1, i_Y + 1) != null
 					&& Board.getCellContent(i_X - 1, i_Y + 1).Player.ID != ID
@@ -149,7 +149,7 @@ namespace Checkers.Model
 					io_NextPlace.Add(i_Y + 2);
 				}
 			}
-			if (i_X < Board.BoardSize - 2 && i_Y > 2 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.FIRST))//i can eat up and right
+			if (i_X < Board.BoardSize - 2 && i_Y > 1 && (Board.getCellContent(i_X, i_Y).Rank == e_Rank.KING || ID == e_PlayerID.FIRST))//i can eat up and right
 			{//+-
 				if (Board.getCellContent(i_X + 1, i_Y - 1) != null
 					&& Board.getCellContent(i_X + 1, i_Y - 1).Player.ID != ID
@@ -180,7 +180,7 @@ namespace Checkers.Model
 		{
 			o_CurrentPlace = new List<int>(0);
 			o_NextPlace = new List<int>(0);
-			
+
 
 			for (int i = 0; i < Board.BoardSize; i++)
 			{
@@ -387,6 +387,6 @@ namespace Checkers.Model
 			return ret;
 		}
 
-		
+
 	}
 }
