@@ -95,7 +95,7 @@ namespace Checkers.Model
 				}
 
 
-				//if anyh of this moves happend it's a tie
+				//if any of this moves don't happend and there are no moves for anone it's a tie
 				else
 				{
 					e_GameStatus = e_StatusOFGame.TIE;
@@ -103,6 +103,8 @@ namespace Checkers.Model
 			}
 			return GameEnded;
 		}
+
+
 		//public void PlayerQuited(e_PlayerID i_ID)
 		//{
 
