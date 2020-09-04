@@ -13,6 +13,7 @@ namespace Checkers
 	{
 		public Player Player1 { get; set; }
 		public Player Player2 { get; set; }
+		private static int m_BoardSize;
 
 		public Piece[,] BoardGame
 		{
@@ -27,7 +28,17 @@ namespace Checkers
 		}
 		private Piece[,] m_BoardGame;
 
-		public int BoardSize { get; set; }
+		public int BoardSize
+		{
+			get
+			{
+				return m_BoardSize;
+			}
+			set
+			{
+				m_BoardSize = value;
+			}
+		}
 
 		private static int initialFilledRowsForPlayer = 0;
 		public static int InitialFilledRowsForPlayer

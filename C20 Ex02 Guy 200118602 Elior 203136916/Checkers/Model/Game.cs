@@ -8,8 +8,8 @@ namespace Checkers.Model
 	public enum e_StatusOFGame { NOTFINISH, WIN, TIE };
 	class Game
 	{
-		
-		public e_StatusOFGame e_GameStatus {get; set;}
+
+		public e_StatusOFGame e_GameStatus { get; set; }
 		public static bool GameEnded { get; set; }
 		public bool IsQuited { get; set; }
 		public e_PlayerID WinnerID { get; set; }
@@ -35,7 +35,7 @@ namespace Checkers.Model
 			Player2 = player2;
 			PlayerTurn = player1;
 			Board = board;
-			
+
 			player1.CountOfPiecesForPlayer = ((board.BoardSize - 2) / 2) * (board.BoardSize / 2);
 			player2.CountOfPiecesForPlayer = ((board.BoardSize - 2) / 2) * (board.BoardSize / 2);
 		}
@@ -61,22 +61,6 @@ namespace Checkers.Model
 					WinnerID = Player2.ID;
 					GameEnded = true;
 				}
-				//checkes if player 2 don't have any moves but player 1 have so he player 1 wins
-				else if (Player2.RunOnAllBoardGame(out currentPlace, out nextPlace) && Player2.allMoves(out currentPlace, out nextPlace) && !(Player1.RunOnAllBoardGame(out currentPlace, out nextPlace)) && !(Player1.allMoves(out currentPlace, out nextPlace)))
-                {
-					e_GameStatus = e_StatusOFGame.WIN;
-					Player1.HasWonAndUpdateTheScore(Player1, Board);
-					WinnerID = Player1.ID;
-					GameEnded = true;
-				}
-				//checks if player 1 don't have any moves but player to haves so player 2 wins.
-				else if(Player2.RunOnAllBoardGame(out currentPlace, out nextPlace) && Player2.allMoves(out currentPlace, out nextPlace) && !(Player1.RunOnAllBoardGame(out currentPlace, out nextPlace)) && !(Player1.allMoves(out currentPlace, out nextPlace)))
-                {
-					e_GameStatus = e_StatusOFGame.WIN;
-					Player2.HasWonAndUpdateTheScore(Player1, Board);
-					WinnerID = Player2.ID;
-					GameEnded = true;
-				}
 				//checks if player 1 quit the game so player 2 wins
 				else if (Player1.HasQuitted)
 				{
@@ -93,10 +77,27 @@ namespace Checkers.Model
 					WinnerID = Player1.ID;
 					GameEnded = true;
 				}
+				//checkes if player 2 don't have any moves but player 1 have so he player 1 wins
+				else if (Player2.RunOnAllBoardGame(out currentPlace, out nextPlace) && Player2.allMoves(out currentPlace, out nextPlace) && !(Player1.RunOnAllBoardGame(out currentPlace, out nextPlace)) && !(Player1.allMoves(out currentPlace, out nextPlace)))
+				{
+					e_GameStatus = e_StatusOFGame.WIN;
+					Player1.HasWonAndUpdateTheScore(Player1, Board);
+					WinnerID = Player1.ID;
+					GameEnded = true;
+				}
+				//checks if player 1 don't have any moves but player to haves so player 2 wins.
+				else if (Player2.RunOnAllBoardGame(out currentPlace, out nextPlace) && Player2.allMoves(out currentPlace, out nextPlace) && !(Player1.RunOnAllBoardGame(out currentPlace, out nextPlace)) && !(Player1.allMoves(out currentPlace, out nextPlace)))
+				{
+					e_GameStatus = e_StatusOFGame.WIN;
+					Player2.HasWonAndUpdateTheScore(Player1, Board);
+					WinnerID = Player2.ID;
+					GameEnded = true;
+				}
+
 
 				//if anyh of this moves happend it's a tie
-                else
-                {
+				else
+				{
 					e_GameStatus = e_StatusOFGame.TIE;
 				}
 			}
@@ -115,14 +116,14 @@ namespace Checkers.Model
 		//	}
 		//}
 
-        public void RefreshBoardGame()
-        {
+		public void RefreshBoardGame()
+		{
 			Board = new Board(Board.BoardSize, Player1, Player2);
 			Player1.CountOfPiecesForPlayer = ((Board.BoardSize - 2) / 2) * (Board.BoardSize / 2);
 			Player2.CountOfPiecesForPlayer = ((Board.BoardSize - 2) / 2) * (Board.BoardSize / 2);
 			Player1.HasQuitted = false;
 			Player2.HasQuitted = false;
-			
+
 		}
-    }
+	}
 }

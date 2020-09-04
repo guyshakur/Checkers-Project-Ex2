@@ -42,7 +42,7 @@ namespace Checkers
 			Console.WriteLine();
 			getUserInitialInput();
 		}
-		
+
 		private static void getUserInitialInput()
 		{
 			Player1.Name = getFromUser("Enter your name (Max size 20 without spaces): ", 20);
@@ -93,16 +93,16 @@ namespace Checkers
 			while (!m_matchIsOver)
 			{
 				//running the loop of game 
-				while (!s_Game.GameLoop())
+				do
 				{
 
 					PrintBoard();
 					playerMoveView(s_Game.PlayerTurn);
-					
-				}
+
+				} while (!s_Game.GameLoop());
 				printScoreAndAskForMoreGame();
-				
-				
+
+
 			}//
 		}
 		private static void printScoreAndAskForMoreGame()
@@ -138,14 +138,14 @@ namespace Checkers
 					s_Game.RefreshBoardGame();
 					s_LastMoveStr = null;
 				}
-				else if(userInput.Equals("N") || userInput.Equals("n"))
-                {
+				else if (userInput.Equals("N") || userInput.Equals("n"))
+				{
 					Screen.Clear();
 					getUserInitialInput();
-					
+
 				}
-                else
-                {
+				else
+				{
 					Console.WriteLine("Do you want to have a rematch? Y / N");
 				}
 
@@ -287,7 +287,7 @@ namespace Checkers
 			paint.AppendLine();
 			Console.WriteLine(paint);
 		}
-		
+
 		private static string getCellAsString(Piece i_GamePiece)
 		{
 			string stringReturn = " ";
