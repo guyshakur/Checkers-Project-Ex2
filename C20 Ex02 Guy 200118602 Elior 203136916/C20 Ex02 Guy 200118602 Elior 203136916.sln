@@ -5,6 +5,11 @@ VisualStudioVersion = 16.0.30406.217
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Checkers", "Checkers\Checkers.csproj", "{FCC3D53B-357F-482B-A038-8A28C6407992}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{94BD1611-A062-4F59-AA9F-B22A58CB2187}"
+	ProjectSection(SolutionItems) = preProject
+		Exercise Checking Report.txt = Exercise Checking Report.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
