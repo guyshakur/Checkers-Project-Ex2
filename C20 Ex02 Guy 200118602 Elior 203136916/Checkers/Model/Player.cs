@@ -27,6 +27,8 @@ namespace Checkers.Model
 			{
 				s_Board = value;
 			}
+
+
 		}
 
 		public int Score { get; set; }

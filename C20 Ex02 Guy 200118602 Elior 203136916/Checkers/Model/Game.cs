@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Runtime.InteropServices;
 
 namespace Checkers.Model
@@ -83,7 +84,14 @@ namespace Checkers.Model
 			}
 		}
 
-
-
-	}
+        public void RefreshBoardGame()
+        {
+			Board = new Board(Board.BoardSize, Player1, Player2);
+			Player1.CountOfPiecesForPlayer = ((Board.BoardSize - 2) / 2) * (Board.BoardSize / 2);
+			Player2.CountOfPiecesForPlayer = ((Board.BoardSize - 2) / 2) * (Board.BoardSize / 2);
+			Player1.HasQuitted = false;
+			Player2.HasQuitted = false;
+			
+		}
+    }
 }
